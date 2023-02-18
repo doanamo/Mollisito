@@ -28,3 +28,15 @@ add_executable(Game ${SOURCE_FILES})
 target_include_directories(Game PRIVATE "Source")
 
 set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Game)
+
+#
+# External
+#
+
+add_dependencies(Game SDL)
+target_link_libraries(Game PRIVATE SDL2main SDL2)
+
+add_custom_command(TARGET Game POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    $<TARGET_FILE:SDL2> $<TARGET_FILE_DIR:Game>
+)
