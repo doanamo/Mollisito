@@ -21,9 +21,13 @@ def clone(url, branch, directory):
 
     shutil.rmtree(os.path.join(directory, ".git"), onerror=remove_read_only)
 
-argument = sys.argv[1]
-if argument == "SDL":
-    clone("https://github.com/libsdl-org/SDL.git", "release-2.26.3", "SDL")
+match sys.argv[1]:
+    case "fmt":
+        clone("https://github.com/fmtlib/fmt.git", "9.1.0", "fmt")
+    case "SDL":
+        clone("https://github.com/libsdl-org/SDL.git", "release-2.26.3", "SDL")
+    case _:
+        sys.exit(1)
 
 exit_code = os.system(f"git add -f .")
 
