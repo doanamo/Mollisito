@@ -1,8 +1,8 @@
-#include "Logger.h"
+#include "Logger.hpp"
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
-void Logger::Setup()
+void Common::SetupLogger()
 {
     // Setup default loggers based on configuration
     spdlog::sinks_init_list sinks =

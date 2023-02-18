@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NonCopyable.h"
+#include "NonCopyable.hpp"
 
 namespace Common
 {

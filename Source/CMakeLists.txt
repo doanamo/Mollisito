@@ -5,12 +5,12 @@ cmake_minimum_required(VERSION 3.25)
 #
 
 set(SOURCE_FILES
-    "Common/Compiler.h"
-    "Common/NonCopyable.h"
-    "Common/ScopeGuard.h"
-    "Common/Logger.h"
+    "Common/Compiler.hpp"
+    "Common/NonCopyable.hpp"
+    "Common/ScopeGuard.hpp"
+    "Common/Logger.hpp"
     "Common/Logger.cpp"
-    "Common/Common.h"
+    "Common/Common.hpp"
     "Main.cpp"
 )
 

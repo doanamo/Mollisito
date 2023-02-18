@@ -1,9 +1,9 @@
-#include "Common/Common.h"
+#include "Common/Common.hpp"
 #include <SDL.h>
 
 int main(int argc, char* args[])
 {
-    Logger::Setup();
+    Common::SetupLogger();
 
     // Initialize SDL library
     if(SDL_Init(SDL_INIT_VIDEO) < 0)

@@ -15,7 +15,7 @@
 #define LOG_ERROR SPDLOG_ERROR
 #define LOG_CRITICAL SPDLOG_CRITICAL
 
-namespace Logger
+namespace Common
 {
-    void Setup();
+    void SetupLogger();
 }
