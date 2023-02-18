@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.25)
 #
 
 set(SOURCE_FILES
+    "Common/Compiler.h"
     "Common/NonCopyable.h"
     "Common/ScopeGuard.h"
     "Common/Common.h"
