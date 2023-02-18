@@ -5,12 +5,13 @@ include(ExternalProject)
 # Checksums
 #
 
-add_custom_target(Checksums
+add_custom_target(External-Checksums
     COMMAND python ${CMAKE_CURRENT_LIST_DIR}/Checksums.py
         ${CMAKE_BINARY_DIR}/External/Checksums/
 )
 
-set_property(TARGET Checksums PROPERTY FOLDER External)
+set_property(TARGET External-Checksums PROPERTY FOLDER External)
+set_property(TARGET External-Checksums PROPERTY PROJECT_LABEL Checksums)
 
 #
 # fmt
@@ -20,9 +21,11 @@ externalproject_add(External-fmt
     PREFIX fmt
     SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/fmt/
     BINARY_DIR fmt/src/build/
-    CMAKE_ARGS -DFMT_MASTER_PROJECT=OFF
-    DEPENDS Checksums
-    INSTALL_COMMAND ""
+    INSTALL_DIR fmt/src/install/
+    CMAKE_ARGS
+        -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+        -DFMT_MASTER_PROJECT=OFF -DFMT_INSTALL=ON
+    DEPENDS External-Checksums
 )
 
 externalproject_add_step(External-fmt checksum
@@ -41,6 +44,37 @@ set_target_properties(fmt PROPERTIES
 )
 
 #
+# spdlog
+#
+
+externalproject_add(External-spdlog
+    PREFIX spdlog
+    SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/spdlog/
+    BINARY_DIR spdlog/src/build/
+    CMAKE_ARGS
+        -DSPDLOG_MASTER_PROJECT=OFF -DSPDLOG_FMT_EXTERNAL=ON
+        -Dfmt_DIR=${CMAKE_BINARY_DIR}/External/fmt/src/install/lib/cmake/fmt/
+    DEPENDS External-Checksums External-fmt
+    INSTALL_COMMAND ""
+)
+
+externalproject_add_step(External-spdlog checksum
+    DEPENDS ${CMAKE_BINARY_DIR}/External/Checksums/spdlog.txt
+    DEPENDERS configure
+)
+
+set_property(TARGET External-spdlog PROPERTY FOLDER External)
+set_property(TARGET External-spdlog PROPERTY PROJECT_LABEL spdlog)
+
+add_library(spdlog STATIC IMPORTED GLOBAL)
+set_target_properties(spdlog PROPERTIES
+    IMPORTED_LOCATION_DEBUG ${CMAKE_BINARY_DIR}/External/spdlog/src/build/Debug/spdlogd.lib
+    IMPORTED_LOCATION_RELEASE ${CMAKE_BINARY_DIR}/External/spdlog/src/build/Release/spdlog.lib
+    INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_LIST_DIR}/spdlog/include/
+    INTERFACE_COMPILE_DEFINITIONS "SPDLOG_FMT_EXTERNAL;SPDLOG_COMPILED_LIB"
+)
+
+#
 # SDL
 #
 
@@ -49,7 +83,7 @@ externalproject_add(External-SDL
     SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/SDL/
     BINARY_DIR SDL/src/build/
     CMAKE_ARGS -DSDL_STATIC=OFF -DSDL_TEST=OFF
-    DEPENDS Checksums
+    DEPENDS External-Checksums
     INSTALL_COMMAND ""
 )
 
