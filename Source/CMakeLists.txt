@@ -8,6 +8,8 @@ set(SOURCE_FILES
     "Common/Compiler.h"
     "Common/NonCopyable.h"
     "Common/ScopeGuard.h"
+    "Common/Logger.h"
+    "Common/Logger.cpp"
     "Common/Common.h"
     "Main.cpp"
 )
