@@ -33,7 +33,8 @@ set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Game)
 # External
 #
 
-add_dependencies(Game SDL)
+# SDL
+add_dependencies(Game External-SDL)
 target_link_libraries(Game PRIVATE SDL2main SDL2)
 
 add_custom_command(TARGET Game POST_BUILD
