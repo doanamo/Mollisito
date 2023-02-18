@@ -13,6 +13,34 @@ add_custom_target(Checksums
 set_property(TARGET Checksums PROPERTY FOLDER External)
 
 #
+# fmt
+#
+
+externalproject_add(External-fmt
+    PREFIX fmt
+    SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/fmt/
+    BINARY_DIR fmt/src/build/
+    CMAKE_ARGS -DFMT_MASTER_PROJECT=OFF
+    DEPENDS Checksums
+    INSTALL_COMMAND ""
+)
+
+externalproject_add_step(External-fmt checksum
+    DEPENDS ${CMAKE_BINARY_DIR}/External/Checksums/fmt.txt
+    DEPENDERS configure
+)
+
+set_property(TARGET External-fmt PROPERTY FOLDER External)
+set_property(TARGET External-fmt PROPERTY PROJECT_LABEL fmt)
+
+add_library(fmt STATIC IMPORTED GLOBAL)
+set_target_properties(fmt PROPERTIES
+    IMPORTED_LOCATION_DEBUG ${CMAKE_BINARY_DIR}/External/fmt/src/build/Debug/fmtd.lib
+    IMPORTED_LOCATION_RELEASE ${CMAKE_BINARY_DIR}/External/fmt/src/build/Release/fmt.lib
+    INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_LIST_DIR}/fmt/include/
+)
+
+#
 # SDL
 #
 
