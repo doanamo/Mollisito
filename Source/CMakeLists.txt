@@ -23,6 +23,10 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCE_FILES})
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+if(MSVC)
+    set(CMAKE_WIN32_EXECUTABLE $<$<CONFIG:Release>:ON>)
+endif()
+
 #
 # Target
 #
