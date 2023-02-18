@@ -24,6 +24,8 @@ def clone(url, branch, directory):
 match sys.argv[1]:
     case "fmt":
         clone("https://github.com/fmtlib/fmt.git", "9.1.0", "fmt")
+    case "spdlog":
+        clone("https://github.com/gabime/spdlog.git", "v1.11.0", "spdlog")
     case "SDL":
         clone("https://github.com/libsdl-org/SDL.git", "release-2.26.3", "SDL")
     case _:
