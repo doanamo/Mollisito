@@ -9,9 +9,9 @@ namespace Render
         , m_channelType(channelType)
         , m_channelCount(channelCount)
     {
-        ASSERT(m_width > 0 && m_height > 0)
-        ASSERT(m_channelType != ChannelType::Invalid)
-        ASSERT(m_channelCount > 0 && m_channelCount <= 8)
+        ASSERT(m_width > 0 && m_height > 0);
+        ASSERT(m_channelType != ChannelType::Invalid);
+        ASSERT(m_channelCount > 0 && m_channelCount <= 8);
 
         switch(m_channelType)
         {
@@ -58,7 +58,7 @@ namespace Render
         }
         else
         {
-            ASSERT(false, "Unimplemented")
+            ASSERT(false, "Unimplemented");
         }
     }
 }
