@@ -38,6 +38,9 @@ target_include_directories(Game PRIVATE "Source")
 target_precompile_headers(Game PRIVATE "Shared.hpp")
 source_group("Generated\\Precompiled" REGULAR_EXPRESSION "cmake_pch")
 
+set_property(TARGET Game PROPERTY UNITY_BUILD ON)
+source_group("Generated\\Unity" REGULAR_EXPRESSION "unity_")
+
 set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Game)
 
 #
