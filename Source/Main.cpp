@@ -1,5 +1,4 @@
-#include "Common/Common.hpp"
-#include <SDL.h>
+#include "Shared.hpp"
 
 int main(int argc, char* args[])
 {

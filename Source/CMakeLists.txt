@@ -11,7 +11,7 @@ set(SOURCE_FILES
     "Common/ScopeGuard.hpp"
     "Common/Logger.hpp"
     "Common/Logger.cpp"
-    "Common/Common.hpp"
+    "Shared.hpp"
     "Main.cpp"
 )
 
@@ -34,6 +34,9 @@ endif()
 
 add_executable(Game ${SOURCE_FILES})
 target_include_directories(Game PRIVATE "Source")
+
+target_precompile_headers(Game PRIVATE "Shared.hpp")
+source_group("Generated\\Precompiled" REGULAR_EXPRESSION "cmake_pch")
 
 set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Game)
 
