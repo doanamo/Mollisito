@@ -24,7 +24,8 @@ int main(int argc, char* args[])
         sdlVersion.major, sdlVersion.minor, sdlVersion.patch);
 
     // Create application window
-    SDL_Window* window = SDL_CreateWindow("Game",
+    const char* windowTitle = "Game";
+    SDL_Window* window = SDL_CreateWindow(windowTitle,
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1024, 576,
         SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
@@ -56,9 +57,31 @@ int main(int argc, char* args[])
         32, 0, 0, 0, 0);
 
     // Start main loop
+    uint64_t timeCurrent = SDL_GetPerformanceCounter();
+    uint64_t timePrevious = timeCurrent;
+    float frameRateUpdateDelay = 0.1f;
+
     bool quit = false;
     while(!quit)
     {
+        // Calculate delta time
+        timePrevious = timeCurrent;
+        timeCurrent = SDL_GetPerformanceCounter();
+
+        float deltaTime = (float)((double)(timeCurrent - timePrevious)
+            / (double)SDL_GetPerformanceFrequency());
+
+        // Display framerate
+        frameRateUpdateDelay -= deltaTime;
+        if(frameRateUpdateDelay < 0.0f)
+        {
+            std::string windowTitleNew = fmt::format("{} ({:.2f} FPS)",
+                windowTitle, 1.0f / deltaTime);
+
+            SDL_SetWindowTitle(window, windowTitleNew.c_str());
+            frameRateUpdateDelay = 1.0f;
+        }
+
         // Process events
         SDL_Event event;
         while(SDL_PollEvent(&event))
