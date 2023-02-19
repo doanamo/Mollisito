@@ -24,9 +24,11 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCE_FILES})
 # Configuration
 #
 
+# Require C++ 17 standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Disable console window for release configuration
 if(MSVC)
     set(CMAKE_WIN32_EXECUTABLE $<$<CONFIG:Release>:ON>)
 endif()

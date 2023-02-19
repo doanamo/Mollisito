@@ -12,6 +12,13 @@ project(Game VERSION 0.1)
 
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "" FORCE)
 
+# Enable fast math for extra performance
+if(MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fp:fast")
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffast-math")
+endif()
+
 # Enable debug symbols for release configuration
 if(MSVC)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi")
