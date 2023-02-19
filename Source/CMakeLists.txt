@@ -6,6 +6,7 @@ cmake_minimum_required(VERSION 3.25)
 
 set(SOURCE_FILES
     "Common/Compiler.hpp"
+    "Common/Debug.hpp"
     "Common/NonCopyable.hpp"
     "Common/ScopeGuard.hpp"
     "Common/Logger.hpp"
