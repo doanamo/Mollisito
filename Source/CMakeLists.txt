@@ -33,7 +33,7 @@ endif()
 #
 
 add_executable(Game ${SOURCE_FILES})
-target_include_directories(Game PRIVATE "Source")
+target_include_directories(Game PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 
 target_precompile_headers(Game PRIVATE "Shared.hpp")
 source_group("Generated\\Precompiled" REGULAR_EXPRESSION "cmake_pch")
