@@ -4,11 +4,14 @@
 
 bool Application::Setup(const SetupInfo& info)
 {
-    // Create frame texture
-    if(!m_frame.Setup(info.windowWidth, info.windowHeight,
-        Graphics::Texture::ChannelType::Uint8, 3))
+    // Setup renderer
+    Graphics::Renderer::SetupInfo rendererSetup;
+    rendererSetup.windowWidth = info.windowWidth;
+    rendererSetup.windowHeight = info.windowHeight;
+
+    if(!m_renderer.Setup(rendererSetup))
     {
-        LOG_ERROR("Failed to create frame texture");
+        LOG_ERROR("Failed to setup renderer");
         return false;
     }
 
@@ -17,5 +20,5 @@ bool Application::Setup(const SetupInfo& info)
 
 void Application::OnFrame(float deltaTime)
 {
-    m_frame.Clear(Math::Color(0.0f, 0.5f, 0.5f));
+    m_renderer.OnFrame(deltaTime);
 }

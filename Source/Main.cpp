@@ -45,12 +45,12 @@ int main(int argc, char* args[])
     LOG_INFO("Create window with {}x{} size", windowWidth, windowHeight);
 
     // Create application instance
-    Application::SetupInfo applicationSetupInfo{};
-    applicationSetupInfo.windowWidth = windowWidth;
-    applicationSetupInfo.windowHeight = windowHeight;
+    Application::SetupInfo applicationSetup{};
+    applicationSetup.windowWidth = windowWidth;
+    applicationSetup.windowHeight = windowHeight;
 
     Application application;
-    if(!application.Setup(applicationSetupInfo))
+    if(!application.Setup(applicationSetup))
     {
         LOG_CRITICAL("Failed to setup application instance");
         return 1;
@@ -59,7 +59,7 @@ int main(int argc, char* args[])
     // Create frame surface
     // It will be used to blit into window surface. We could avoid allocating
     // this, but then we would lose scaling functionality provided by SDL.
-    Graphics::Texture& frame = application.GetFrame();
+    Graphics::Texture& frame = application.GetRenderer().GetFrame();
     SDL_Surface* frameSurface = SDL_CreateRGBSurface(
         0, frame.GetWidth(), frame.GetHeight(),
         32, 0, 0, 0, 0);
