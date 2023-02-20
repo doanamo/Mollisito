@@ -29,6 +29,11 @@ namespace Math
 
         explicit Color4b(const Color4f& color);
 
+        bool IsUniform() const
+        {
+            return r == g && r == b && r == a;
+        }
+
         union
         {
             struct
@@ -63,6 +68,11 @@ namespace Math
         }
 
         explicit Color4f(const Color4b& color);
+
+        bool IsUniform() const
+        {
+            return r == g && r == b && r == a;
+        }
 
         union
         {

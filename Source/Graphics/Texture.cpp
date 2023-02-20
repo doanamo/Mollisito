@@ -47,9 +47,16 @@ namespace Graphics
     {
         if(m_channelType == ChannelType::Uint8 && m_channelCount == 4)
         {
-            for(int i = 0; i < m_width * m_height; ++i)
+            if(color.IsUniform())
             {
-                (uint32_t&)m_data[i * 4] = color.value;
+                memset(m_data.data(), color.r, m_data.size());
+            }
+            else
+            {
+                for(int i = 0; i < m_width * m_height; ++i)
+                {
+                    (uint32_t&)m_data[i * 4] = color.value;
+                }
             }
         }
         else
