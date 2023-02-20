@@ -5,7 +5,7 @@ bool Graphics::Renderer::Setup(const SetupInfo& info)
 {
     // Create frame texture
     if(!m_frame.Setup(info.windowWidth, info.windowHeight,
-        Graphics::Texture::ChannelType::Uint8, 3))
+        Graphics::Texture::ChannelType::Uint8, 4))
     {
         LOG_ERROR("Failed to create frame texture");
         return false;

@@ -75,6 +75,12 @@ namespace Graphics
             return m_data.data();
         }
 
+        size_t GetDataSize() const
+        {
+            ASSERT(!m_data.empty());
+            return m_data.size();
+        }
+
     private:
         int m_width = 0;
         int m_height = 0;

@@ -45,11 +45,21 @@ namespace Graphics
 
     void Texture::Clear(const Math::Color4b& color)
     {
-        for(int y = 0; y < m_height; ++y)
+        if(m_channelType == ChannelType::Uint8 && m_channelCount == 4)
         {
-            for(int x = 0; x < m_width; ++x)
+            for(int i = 0; i < m_width * m_height; ++i)
             {
-                DrawPixel(x, y, color);
+                (uint32_t&)m_data[i * 4] = color.value;
+            }
+        }
+        else
+        {
+            for(int y = 0; y < m_height; ++y)
+            {
+                for(int x = 0; x < m_width; ++x)
+                {
+                    DrawPixel(x, y, color);
+                }
             }
         }
     }

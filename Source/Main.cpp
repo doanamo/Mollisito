@@ -61,8 +61,8 @@ int main(int argc, char* args[])
     // this, but then we would lose scaling functionality provided by SDL.
     Graphics::Texture& frame = application.GetRenderer().GetFrame();
     SDL_Surface* frameSurface = SDL_CreateRGBSurface(
-        0, frame.GetWidth(), frame.GetHeight(),
-        32, 0, 0, 0, 0);
+        0, frame.GetWidth(), frame.GetHeight(), 32,
+        0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
 
     // Start main loop
     uint64_t timeCurrent = SDL_GetPerformanceCounter();
@@ -105,12 +105,7 @@ int main(int argc, char* args[])
 
         // Copy frame to surface
         auto frameSurfacePixels = (uint32_t*)frameSurface->pixels;
-        for(int i = 0; i < frameSurface->w * frameSurface->h; ++i)
-        {
-            const uint8_t* framePixel = frame.GetPixelAddress(i);
-            frameSurfacePixels[i] = SDL_MapRGBA(frameSurface->format,
-                framePixel[0], framePixel[1], framePixel[2], 255);
-        }
+        memcpy(frameSurfacePixels, frame.GetData(), frame.GetDataSize());
 
         // Copy surface to window and present
         SDL_Surface* windowSurface = SDL_GetWindowSurface(window);
