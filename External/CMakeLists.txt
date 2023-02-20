@@ -23,6 +23,7 @@ externalproject_add(External-fmt
     BINARY_DIR fmt/src/build/
     INSTALL_DIR fmt/src/install/
     CMAKE_ARGS
+        -DCMAKE_CXX_FLAGS_RELEASE=${CMAKE_CXX_FLAGS_RELEASE}
         -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
         -DFMT_MASTER_PROJECT=OFF -DFMT_INSTALL=ON
     DEPENDS External-Checksums
@@ -52,6 +53,7 @@ externalproject_add(External-spdlog
     SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/spdlog/
     BINARY_DIR spdlog/src/build/
     CMAKE_ARGS
+        -DCMAKE_CXX_FLAGS_RELEASE=${CMAKE_CXX_FLAGS_RELEASE}
         -DSPDLOG_MASTER_PROJECT=OFF -DSPDLOG_FMT_EXTERNAL=ON
         -Dfmt_DIR=${CMAKE_BINARY_DIR}/External/fmt/src/install/lib/cmake/fmt/
     DEPENDS External-Checksums External-fmt
@@ -82,7 +84,9 @@ externalproject_add(External-SDL
     PREFIX SDL
     SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/SDL/
     BINARY_DIR SDL/src/build/
-    CMAKE_ARGS -DSDL_STATIC=OFF -DSDL_TEST=OFF
+    CMAKE_ARGS
+        -DCMAKE_C_FLAGS_RELEASE=${CMAKE_C_FLAGS_RELEASE}
+        -DSDL_STATIC=OFF -DSDL_TEST=OFF
     DEPENDS External-Checksums
     INSTALL_COMMAND ""
 )
