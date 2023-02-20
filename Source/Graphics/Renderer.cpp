@@ -16,5 +16,5 @@ bool Graphics::Renderer::Setup(const SetupInfo& info)
 
 void Graphics::Renderer::OnFrame(float deltaTime)
 {
-    m_frame.Clear(Math::Color(0.0f, 0.5f, 0.5f));
+    m_frame.Clear(Math::Color4b(0, 128, 128));
 }

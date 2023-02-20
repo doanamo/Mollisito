@@ -19,8 +19,11 @@ namespace Graphics
 
         bool Setup(int width, int height, ChannelType channelType, int channelCount);
 
-        void Clear(const Math::Color& color);
-        void DrawPixel(int x, int y, const Math::Color& color);
+        void Clear(const Math::Color4b& color);
+        void Clear(const Math::Color4f& color);
+
+        void DrawPixel(int x, int y, const Math::Color4b& color);
+        void DrawPixel(int x, int y, const Math::Color4f& color);
 
         int GetWidth() const
         {
