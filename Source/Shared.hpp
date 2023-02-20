@@ -37,3 +37,7 @@ COMPILER_WARNINGS_DISABLE_ALL_POP()
 // Common
 #include "Common/NonCopyable.hpp"
 #include "Common/ScopeGuard.hpp"
+
+// Math
+#include "Math/Vector.hpp"
+#include "Math/Color.hpp"

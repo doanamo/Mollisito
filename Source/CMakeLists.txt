@@ -11,6 +11,7 @@ set(SOURCE_FILES
     "Common/ScopeGuard.hpp"
     "Common/Logger.hpp"
     "Common/Logger.cpp"
+    "Math/Vector.hpp"
     "Math/Color.hpp"
     "Graphics/Texture.hpp"
     "Graphics/Texture.cpp"
