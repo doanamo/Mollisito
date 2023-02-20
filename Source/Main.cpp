@@ -5,6 +5,10 @@ int main(int argc, char* args[])
 {
     Common::SetupLogger();
 
+    // Global flags
+    bool enableHardwarePresent = true;
+    bool enableHardwarePresentVsync = false;
+
     // Initialize SDL library
     if(SDL_Init(SDL_INIT_VIDEO) < 0)
     {
@@ -44,6 +48,26 @@ int main(int argc, char* args[])
     SDL_GetWindowSizeInPixels(window, &windowWidth, &windowHeight);
     LOG_INFO("Create window with {}x{} size", windowWidth, windowHeight);
 
+    // Create hardware renderer for presenting
+    SDL_Renderer* renderer = nullptr;
+    if(enableHardwarePresent)
+    {
+        uint32_t flags = SDL_RENDERER_ACCELERATED;
+        if(enableHardwarePresentVsync)
+        {
+            flags |= SDL_RENDERER_PRESENTVSYNC;
+        }
+
+        renderer = SDL_CreateRenderer(window, -1, flags);
+
+        if(!renderer)
+        {
+            LOG_WARNING("Failed to create SDL renderer");
+            LOG_WARNING("Falling back to software present");
+            enableHardwarePresent = false;
+        }
+    }
+
     // Create application instance
     Application::SetupInfo applicationSetup{};
     applicationSetup.windowWidth = windowWidth;
@@ -56,13 +80,40 @@ int main(int argc, char* args[])
         return 1;
     }
 
+    const Graphics::Texture& frame = application.GetRenderer().GetFrame();
+
+    // Create frame texture
+    SDL_Texture* frameTexture = nullptr;
+    if(enableHardwarePresent)
+    {
+        frameTexture = SDL_CreateTexture(renderer,
+            SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING,
+            frame.GetWidth(), frame.GetHeight());
+
+        if(!frameTexture)
+        {
+            LOG_WARNING("Failed to create SDL texture");
+            LOG_WARNING("Falling back to software present");
+            enableHardwarePresent = false;
+        }
+    }
+
     // Create frame surface
     // It will be used to blit into window surface. We could avoid allocating
     // this, but then we would lose scaling functionality provided by SDL.
-    Graphics::Texture& frame = application.GetRenderer().GetFrame();
-    SDL_Surface* frameSurface = SDL_CreateRGBSurface(
-        0, frame.GetWidth(), frame.GetHeight(), 32,
-        0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
+    SDL_Surface* frameSurface = nullptr;
+    if(!enableHardwarePresent)
+    {
+        frameSurface = SDL_CreateRGBSurface(
+            0, frame.GetWidth(), frame.GetHeight(), 32,
+            0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
+
+        if(!frameSurface)
+        {
+            LOG_CRITICAL("Failed to create SDL surface");
+            return 1;
+        }
+    }
 
     // Start main loop
     uint64_t timeCurrent = SDL_GetPerformanceCounter();
@@ -103,14 +154,24 @@ int main(int argc, char* args[])
         // Frame processing
         application.OnFrame(deltaTime);
 
-        // Copy frame to surface
-        auto frameSurfacePixels = (uint32_t*)frameSurface->pixels;
-        memcpy(frameSurfacePixels, frame.GetData(), frame.GetDataSize());
+        // Present frame
+        if(enableHardwarePresent)
+        {
+            SDL_UpdateTexture(frameTexture, nullptr, frame.GetData(), frame.GetPitch());
+            SDL_RenderCopy(renderer, frameTexture, nullptr, nullptr);
+            SDL_RenderPresent(renderer);
+        }
+        else
+        {
+            // Copy frame to surface
+            auto frameSurfacePixels = (uint32_t*)frameSurface->pixels;
+            memcpy(frameSurfacePixels, frame.GetData(), frame.GetDataSize());
 
-        // Copy surface to window and present
-        SDL_Surface* windowSurface = SDL_GetWindowSurface(window);
-        SDL_BlitScaled(frameSurface, nullptr, windowSurface, nullptr);
-        SDL_UpdateWindowSurface(window);
+            // Copy surface to window and present
+            SDL_Surface* windowSurface = SDL_GetWindowSurface(window);
+            SDL_BlitScaled(frameSurface, nullptr, windowSurface, nullptr);
+            SDL_UpdateWindowSurface(window);
+        }
     }
 
     LOG_INFO("Exiting application...");

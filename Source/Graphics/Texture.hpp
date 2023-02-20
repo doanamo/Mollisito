@@ -37,6 +37,12 @@ namespace Graphics
             return m_height;
         }
 
+        int GetPitch() const
+        {
+            ASSERT(m_width);
+            return m_width * GetChannelSize() * GetChannelCount();
+        }
+
         ChannelType GetChannelType() const
         {
             ASSERT(m_channelType != ChannelType::Invalid);
