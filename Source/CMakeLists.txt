@@ -14,6 +14,8 @@ set(SOURCE_FILES
     "Math/Color.hpp"
     "Render/Texture.hpp"
     "Render/Texture.cpp"
+    "Application.hpp"
+    "Application.cpp"
     "Shared.hpp"
     "Main.cpp"
 )

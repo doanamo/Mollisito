@@ -1,6 +1,5 @@
 #include "Shared.hpp"
-#include "Math/Color.hpp"
-#include "Render/Texture.hpp"
+#include "Application.hpp"
 
 int main(int argc, char* args[])
 {
@@ -45,18 +44,22 @@ int main(int argc, char* args[])
     SDL_GetWindowSizeInPixels(window, &windowWidth, &windowHeight);
     LOG_INFO("Create window with {}x{} size", windowWidth, windowHeight);
 
-    // Create frame texture
-    Render::Texture frame;
-    if(!frame.Setup(windowWidth, windowHeight,
-        Render::Texture::ChannelType::Uint8, 3))
+    // Create application instance
+    Application::SetupInfo applicationSetupInfo{};
+    applicationSetupInfo.windowWidth = windowWidth;
+    applicationSetupInfo.windowHeight = windowHeight;
+
+    Application application;
+    if(!application.Setup(applicationSetupInfo))
     {
-        LOG_CRITICAL("Failed to create frame texture");
+        LOG_CRITICAL("Failed to setup application instance");
         return 1;
     }
 
     // Create frame surface
     // It will be used to blit into window surface. We could avoid allocating
     // this, but then we would lose scaling functionality provided by SDL.
+    Render::Texture& frame = application.GetFrame();
     SDL_Surface* frameSurface = SDL_CreateRGBSurface(
         0, frame.GetWidth(), frame.GetHeight(),
         32, 0, 0, 0, 0);
@@ -97,8 +100,8 @@ int main(int argc, char* args[])
             }
         }
 
-        // Render frame
-        frame.Clear(Math::Color(0.0f, 0.5f, 0.5f));
+        // Frame processing
+        application.OnFrame(deltaTime);
 
         // Copy frame to surface
         auto frameSurfacePixels = (uint32_t*)frameSurface->pixels;
