@@ -1,7 +1,7 @@
 #include "Shared.hpp"
 #include "Texture.hpp"
 
-namespace Render
+namespace Graphics
 {
     bool Texture::Setup(int width, int height, ChannelType channelType, int channelCount)
     {

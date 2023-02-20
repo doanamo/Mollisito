@@ -6,7 +6,7 @@ bool Application::Setup(const SetupInfo& info)
 {
     // Create frame texture
     if(!m_frame.Setup(info.windowWidth, info.windowHeight,
-        Render::Texture::ChannelType::Uint8, 3))
+        Graphics::Texture::ChannelType::Uint8, 3))
     {
         LOG_ERROR("Failed to create frame texture");
         return false;

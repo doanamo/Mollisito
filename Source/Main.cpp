@@ -59,7 +59,7 @@ int main(int argc, char* args[])
     // Create frame surface
     // It will be used to blit into window surface. We could avoid allocating
     // this, but then we would lose scaling functionality provided by SDL.
-    Render::Texture& frame = application.GetFrame();
+    Graphics::Texture& frame = application.GetFrame();
     SDL_Surface* frameSurface = SDL_CreateRGBSurface(
         0, frame.GetWidth(), frame.GetHeight(),
         32, 0, 0, 0, 0);

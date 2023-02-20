@@ -2,7 +2,7 @@
 
 #include "Math/Color.hpp"
 
-namespace Render
+namespace Graphics
 {
     class Texture
     {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Render/Texture.hpp"
+#include "Graphics/Texture.hpp"
 
 class Application
 {
@@ -17,11 +17,11 @@ public:
     bool Setup(const SetupInfo& info);
     void OnFrame(float deltaTime);
 
-    Render::Texture& GetFrame()
+    Graphics::Texture& GetFrame()
     {
         return m_frame;
     }
 
 private:
-    Render::Texture m_frame;
+    Graphics::Texture m_frame;
 };
