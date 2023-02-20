@@ -46,8 +46,13 @@ int main(int argc, char* args[])
     LOG_INFO("Create window with {}x{} size", windowWidth, windowHeight);
 
     // Create frame texture
-    Render::Texture frame(windowWidth, windowHeight,
-        Render::Texture::ChannelType::Uint8, 3);
+    Render::Texture frame;
+    if(!frame.Setup(windowWidth, windowHeight,
+        Render::Texture::ChannelType::Uint8, 3))
+    {
+        LOG_CRITICAL("Failed to create frame texture");
+        return 1;
+    }
 
     // Create frame surface
     // It will be used to blit into window surface. We could avoid allocating

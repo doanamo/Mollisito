@@ -14,8 +14,10 @@ namespace Render
             Float,
         };
 
-        Texture(int width, int height, ChannelType channelType, int channelCount);
+        Texture() = default;
         ~Texture() = default;
+
+        bool Setup(int width, int height, ChannelType channelType, int channelCount);
 
         void Clear(const Math::Color& color);
         void DrawPixel(int x, int y, const Math::Color& color);

@@ -3,28 +3,44 @@
 
 namespace Render
 {
-    Texture::Texture(int width, int height, ChannelType channelType, int channelCount)
-        : m_width(width)
-        , m_height(height)
-        , m_channelType(channelType)
-        , m_channelCount(channelCount)
+    bool Texture::Setup(int width, int height, ChannelType channelType, int channelCount)
     {
-        ASSERT(m_width > 0 && m_height > 0);
-        ASSERT(m_channelType != ChannelType::Invalid);
-        ASSERT(m_channelCount > 0 && m_channelCount <= 8);
+        if(width < 0 || height < 0)
+        {
+            return false;
+        }
 
-        switch(m_channelType)
+        if(channelType == ChannelType::Invalid)
+        {
+            return false;
+        }
+
+        if(channelCount < 0 || channelCount > 8)
+        {
+            return false;
+        }
+
+        int channelSize = 0;
+        switch(channelType)
         {
         case ChannelType::Uint8:
-            m_channelSize = sizeof(uint8_t);
+            channelSize = sizeof(uint8_t);
             break;
 
         case ChannelType::Float:
-            m_channelSize = sizeof(float);
+            channelSize = sizeof(float);
             break;
         }
 
+        m_width = width;
+        m_height = height;
+        m_channelType = channelType;
+        m_channelSize = channelSize;
+        m_channelCount = channelCount;
+
         m_data.resize(m_width * m_height * m_channelSize * m_channelCount);
+
+        return true;
     }
 
     void Texture::Clear(const Math::Color& color)
