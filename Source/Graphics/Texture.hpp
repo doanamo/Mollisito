@@ -22,8 +22,8 @@ namespace Graphics
         void Clear(const Math::Color4b& color);
         void Clear(const Math::Color4f& color);
 
-        void DrawPixel(int x, int y, const Math::Color4b& color);
-        void DrawPixel(int x, int y, const Math::Color4f& color);
+        void SetPixel(int x, int y, const Math::Color4b& color);
+        void SetPixel(int x, int y, const Math::Color4f& color);
 
         int GetWidth() const
         {

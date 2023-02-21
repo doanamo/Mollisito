@@ -65,7 +65,7 @@ namespace Graphics
             {
                 for(int x = 0; x < m_width; ++x)
                 {
-                    DrawPixel(x, y, color);
+                    SetPixel(x, y, color);
                 }
             }
         }
@@ -77,12 +77,12 @@ namespace Graphics
         {
             for(int x = 0; x < m_width; ++x)
             {
-                DrawPixel(x, y, color);
+                SetPixel(x, y, color);
             }
         }
     }
 
-    void Texture::DrawPixel(int x, int y, const Math::Color4b& color)
+    void Texture::SetPixel(int x, int y, const Math::Color4b& color)
     {
         if(m_channelType == ChannelType::Uint8)
         {
@@ -94,7 +94,7 @@ namespace Graphics
         }
         else if(m_channelType == ChannelType::Float)
         {
-            DrawPixel(x, y, Math::Color4f(color));
+            SetPixel(x, y, Math::Color4f(color));
         }
         else
         {
@@ -102,7 +102,7 @@ namespace Graphics
         }
     }
 
-    void Texture::DrawPixel(int x, int y, const Math::Color4f& color)
+    void Texture::SetPixel(int x, int y, const Math::Color4f& color)
     {
         if(m_channelType == ChannelType::Float)
         {
@@ -114,7 +114,7 @@ namespace Graphics
         }
         else if(m_channelType == ChannelType::Uint8)
         {
-            DrawPixel(x, y, Math::Color4b(color));
+            SetPixel(x, y, Math::Color4b(color));
         }
         else
         {
