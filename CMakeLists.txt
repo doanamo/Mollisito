@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.25)
 # Project
 #
 
-project(Game VERSION 0.1)
+project(Mollisito VERSION 0.1)
 
 #
 # Configuration
