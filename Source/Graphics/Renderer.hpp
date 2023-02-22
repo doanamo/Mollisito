@@ -17,7 +17,10 @@ namespace Graphics
         };
 
         bool Setup(const SetupInfo& info);
-        void OnFrame(float deltaTime);
+        void ClearFrame();
+
+        void DrawLine(const Math::Vector2f& beginPosition, const Math::Vector2f& endPosition,
+            const Math::Color4f& beginColor, const Math::Color4f& endColor);
 
         Graphics::Texture& GetFrame()
         {

@@ -20,5 +20,8 @@ bool Application::Setup(const SetupInfo& info)
 
 void Application::OnFrame(float deltaTime)
 {
-    m_renderer.OnFrame(deltaTime);
+    m_renderer.ClearFrame();
+    m_renderer.DrawLine(
+        Math::Vector2f(50.0f, 50.0f), Math::Vector2f(300.0f, 200.0f),
+        Math::Color4f(1.0f, 0.0f, 0.0f), Math::Color4f(0.0f, 1.0f, 0.0f));
 }
