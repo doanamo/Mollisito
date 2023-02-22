@@ -43,19 +43,21 @@ namespace Graphics
         return true;
     }
 
-    void Texture::Clear(const Math::Color4b& color)
+    void Texture::Clear(const Math::Color4f& color)
     {
         if(m_channelType == ChannelType::Uint8 && m_channelCount == 4)
         {
             if(color.IsUniform())
             {
-                memset(m_data.data(), color.r, m_data.size());
+                uint8_t pattern = (uint8_t)(color.r * 255.0f + 0.5f);
+                memset(m_data.data(), pattern, m_data.size());
             }
             else
             {
+                uint32_t value = color.ToUint32();
                 for(int i = 0; i < m_width * m_height; ++i)
                 {
-                    (uint32_t&)m_data[i * 4] = color.value;
+                    (uint32_t&)m_data[i * 4] = value;
                 }
             }
         }
@@ -71,54 +73,23 @@ namespace Graphics
         }
     }
 
-    void Texture::Clear(const Math::Color4f& color)
-    {
-        for(int y = 0; y < m_height; ++y)
-        {
-            for(int x = 0; x < m_width; ++x)
-            {
-                SetPixel(x, y, color);
-            }
-        }
-    }
-
-    void Texture::SetPixel(int x, int y, const Math::Color4b& color)
+    void Texture::SetPixel(int x, int y, const Math::Color4f& color)
     {
         if(m_channelType == ChannelType::Uint8)
         {
             uint8_t* pixel = GetPixelAddress(x, y);
             for(int i = 0; i < m_channelCount; ++i)
             {
-                pixel[i] = color.array[i];
+                pixel[i] = (uint8_t)(color.array[i] * 255.0f + 0.5f);
             }
         }
         else if(m_channelType == ChannelType::Float)
         {
-            SetPixel(x, y, Math::Color4f(color));
-        }
-        else
-        {
-            ASSERT(false, "Unimplemented");
-        }
-    }
-
-    void Texture::SetPixel(int x, int y, const Math::Color4f& color)
-    {
-        if(m_channelType == ChannelType::Float)
-        {
-            auto pixel = (float*)GetPixelAddress(x, y);
+            float* pixel = (float*)GetPixelAddress(x, y);
             for(int i = 0; i < m_channelCount; ++i)
             {
                 pixel[i] = color.array[i];
             }
-        }
-        else if(m_channelType == ChannelType::Uint8)
-        {
-            SetPixel(x, y, Math::Color4b(color));
-        }
-        else
-        {
-            ASSERT(false, "Unimplemented");
         }
     }
 }
