@@ -96,6 +96,8 @@ int main(int argc, char* args[])
             LOG_WARNING("Falling back to software present");
             enableHardwarePresent = false;
         }
+
+        SDL_SetTextureScaleMode(frameTexture, SDL_ScaleModeNearest);
     }
 
     // Create frame surface
