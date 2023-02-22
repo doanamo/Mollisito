@@ -69,4 +69,14 @@ namespace Math
         float y;
         float z;
     };
+
+    inline Vector2f Lerp(const Vector2f& a, const Vector2f& b, float alpha)
+    {
+        return a + (b - a) * alpha;
+    }
+
+    inline Vector3f Lerp(const Vector3f& a, const Vector3f& b, float alpha)
+    {
+        return a + (b - a) * alpha;
+    }
 }
