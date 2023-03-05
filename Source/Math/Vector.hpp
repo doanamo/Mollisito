@@ -6,9 +6,8 @@ namespace Math
     struct Vector2
     {
         Vector2() = default;
-        Vector2(Type x, Type y)
-            : x(x)
-            , y(y)
+        constexpr Vector2(Type x, Type y)
+            : x(x), y(y)
         {
         }
 
@@ -37,8 +36,7 @@ namespace Math
             return x == y;
         }
 
-        Type x;
-        Type y;
+        Type x, y;
     };
 
     using Vector2i = Vector2<int>;
@@ -48,10 +46,8 @@ namespace Math
     struct Vector3
     {
         Vector3() = default;
-        Vector3(Type x, Type y, Type z)
-            : x(x)
-            , y(y)
-            , z(z)
+        constexpr Vector3(Type x, Type y, Type z)
+            : x(x), y(y), z(z)
         {
         }
 
@@ -84,16 +80,12 @@ namespace Math
         {
             struct  
             {
-                Type x;
-                Type y;
-                Type z;
+                Type x, y, z;
             };
 
             struct
             {
-                Type r;
-                Type g;
-                Type b;
+                Type r, g, b;
             };
 
             Type array[3];
@@ -107,11 +99,8 @@ namespace Math
     struct Vector4
     {
         Vector4() = default;
-        Vector4(Type x, Type y, Type z, Type w)
-            : x(x)
-            , y(y)
-            , z(z)
-            , w(w)
+        constexpr Vector4(Type x, Type y, Type z, Type w)
+            : x(x), y(y), z(z), w(w)
         {
         }
 
@@ -144,18 +133,12 @@ namespace Math
         {
             struct  
             {
-                Type x;
-                Type y;
-                Type z;
-                Type w;
+                Type x, y, z, w;
             };
 
             struct
             {
-                Type r;
-                Type g;
-                Type b;
-                Type a;
+                Type r, g, b, a;
             };
 
             Type array[4];
