@@ -92,22 +92,22 @@ namespace Math
 
         Vector4 operator+(const Vector4& other) const
         {
-            return Vector3(x + other.x, y + other.y, z + other.z, w + other.w);
+            return Vector4(x + other.x, y + other.y, z + other.z, w + other.w);
         }
 
         Vector4 operator-(const Vector4& other) const
         {
-            return Vector3(x - other.x, y - other.y, z - other.z, w - other.w);
+            return Vector4(x - other.x, y - other.y, z - other.z, w - other.w);
         }
 
         Vector4 operator*(Type value) const
         {
-            return Vector3(x * value, y * value, z * value, w * value);
+            return Vector4(x * value, y * value, z * value, w * value);
         }
 
         Vector4 operator/(Type value) const
         {
-            return Vector3(x / value, y / value, z / value, w / value);
+            return Vector4(x / value, y / value, z / value, w / value);
         }
 
         Type x;
