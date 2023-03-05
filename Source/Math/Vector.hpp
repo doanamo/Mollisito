@@ -147,10 +147,4 @@ namespace Math
 
     using Vec4i = Vec4<int>;
     using Vec4f = Vec4<float>;
-
-    template<typename Type>
-    Type Lerp(const Type& a, const Type& b, float alpha)
-    {
-        return a + (b - a) * alpha;
-    }
 }

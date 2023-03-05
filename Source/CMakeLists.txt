@@ -13,6 +13,7 @@ set(SOURCE_FILES
     "Common/Logger.cpp"
     "Math/Vector.hpp"
     "Math/Constants.hpp"
+    "Math/Utility.hpp"
     "Graphics/Texture.hpp"
     "Graphics/Texture.cpp"
     "Graphics/Clipper.hpp"
