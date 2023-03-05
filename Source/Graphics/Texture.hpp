@@ -19,6 +19,7 @@ namespace Graphics
 
         void Clear(const Math::Vector4f& color);
         void SetPixel(int x, int y, const Math::Vector4f& color);
+        Math::Vector4f GetPixel(int x, int y) const;
 
         int GetWidth() const
         {
@@ -58,12 +59,24 @@ namespace Graphics
 
         uint8_t* GetPixelAddress(int x, int y)
         {
+            return const_cast<uint8_t*>(
+                std::as_const(*this).GetPixelAddress(x, y));
+        }
+
+        const uint8_t* GetPixelAddress(int x, int y) const
+        {
             ASSERT(x >= 0 && x < m_width);
             ASSERT(y >= 0 && y < m_height);
             return GetPixelAddress(y * m_width + x);
         }
 
         uint8_t* GetPixelAddress(size_t index)
+        {
+            return const_cast<uint8_t*>(
+                std::as_const(*this).GetPixelAddress(index));
+        }
+
+        const uint8_t* GetPixelAddress(size_t index) const
         {
             size_t pixelIndex = GetChannelSize() * m_channelCount * index;
             ASSERT(pixelIndex >= 0 && pixelIndex < m_data.size());

@@ -49,7 +49,7 @@ namespace Graphics
         {
             if(color.IsUniform())
             {
-                uint8_t pattern = (uint8_t)(color.r * 255.0f + 0.5f);
+                auto pattern = (uint8_t)(color.r * 255.0f);
                 memset(m_data.data(), pattern, m_data.size());
             }
             else
@@ -84,16 +84,39 @@ namespace Graphics
             uint8_t* pixel = GetPixelAddress(x, y);
             for(int i = 0; i < m_channelCount; ++i)
             {
-                pixel[i] = (uint8_t)(color.array[i] * 255.0f + 0.5f);
+                pixel[i] = (uint8_t)(color.array[i] * 255.0f);
             }
         }
         else if(m_channelType == ChannelType::Float)
         {
-            float* pixel = (float*)GetPixelAddress(x, y);
+            auto* pixel = (float*)GetPixelAddress(x, y);
             for(int i = 0; i < m_channelCount; ++i)
             {
                 pixel[i] = color.array[i];
             }
         }
+    }
+
+    Math::Vector4f Texture::GetPixel(int x, int y) const
+    {
+        Math::Vector4f result = Color::Black;
+        if(m_channelType == ChannelType::Uint8)
+        {
+            const uint8_t* pixel = GetPixelAddress(x, y);
+            for(int i = 0; i < m_channelCount; ++i)
+            {
+                result.array[i] = (uint8_t)(pixel[i] * (1.0f / 255.0f));
+            }
+        }
+        else if(m_channelType == ChannelType::Float)
+        {
+            auto* pixel = (const float*)GetPixelAddress(x, y);
+            for(int i = 0; i < m_channelCount; ++i)
+            {
+                result.array[i] = pixel[i];
+            }
+        }
+
+        return result;
     }
 }
