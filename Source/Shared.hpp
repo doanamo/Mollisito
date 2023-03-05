@@ -40,5 +40,4 @@ COMPILER_WARNINGS_DISABLE_ALL_POP()
 
 // Math
 #include "Math/Vector.hpp"
-#include "Math/Color.hpp"
 #include "Math/Constants.hpp"

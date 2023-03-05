@@ -20,5 +20,5 @@ bool Graphics::Renderer::Setup(const SetupInfo& info)
 
 void Graphics::Renderer::ClearFrame()
 {
-    m_frame.Clear(Math::Color4f(0.0f, 0.0f, 0.0f, 0.0f));
+    m_frame.Clear(Math::Vector4f(0.0f, 0.0f, 0.0f, 0.0f));
 }

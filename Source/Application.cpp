@@ -1,6 +1,5 @@
 #include "Shared.hpp"
 #include "Application.hpp"
-#include "Math/Color.hpp"
 
 bool Application::Setup(const SetupInfo& info)
 {
@@ -55,9 +54,9 @@ void Application::OnFrame(float deltaTime)
             position.x + std::cos(rotation + Math::Pi + Math::Pi / 6.0f) * size,
             position.y + std::sin(rotation + Math::Pi + Math::Pi / 6.0f) * size);
 
-        auto c1 = Math::Color4f(std::max(0.0f, 1.0f - 0.02f * i), 0.0f, 0.0f);
-        auto c2 = Math::Color4f(0.0f, std::max(0.0f, 1.0f - 0.02f * i), 0.0f);
-        auto c3 = Math::Color4f(0.0f, 0.0f, std::max(0.0f, 1.0f - 0.02f * i));
+        auto c1 = Math::Vector4f(std::max(0.0f, 1.0f - 0.02f * i), 0.0f, 0.0f, 1.0f);
+        auto c2 = Math::Vector4f(0.0f, std::max(0.0f, 1.0f - 0.02f * i), 0.0f, 1.0f);
+        auto c3 = Math::Vector4f(0.0f, 0.0f, std::max(0.0f, 1.0f - 0.02f * i), 1.0f);
 
         rasterizer.DrawLine(frame, p2, p3, c2, c3);
         rasterizer.DrawLine(frame, p3, p1, c3, c1);

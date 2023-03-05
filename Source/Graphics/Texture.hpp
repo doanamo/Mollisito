@@ -1,8 +1,5 @@
 #pragma once
 
-#include "Common/NonCopyable.hpp"
-#include "Math/Color.hpp"
-
 namespace Graphics
 {
     class Texture : private Common::NonCopyable
@@ -20,8 +17,8 @@ namespace Graphics
 
         bool Setup(int width, int height, ChannelType channelType, int channelCount);
 
-        void Clear(const Math::Color4f& color);
-        void SetPixel(int x, int y, const Math::Color4f& color);
+        void Clear(const Math::Vector4f& color);
+        void SetPixel(int x, int y, const Math::Vector4f& color);
 
         int GetWidth() const
         {

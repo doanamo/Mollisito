@@ -12,7 +12,6 @@ set(SOURCE_FILES
     "Common/Logger.hpp"
     "Common/Logger.cpp"
     "Math/Vector.hpp"
-    "Math/Color.hpp"
     "Math/Constants.hpp"
     "Graphics/Texture.hpp"
     "Graphics/Texture.cpp"

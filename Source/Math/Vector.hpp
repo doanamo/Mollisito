@@ -32,6 +32,11 @@ namespace Math
             return Vector2(x / value, y / value);
         }
 
+        bool IsUniform() const
+        {
+            return x == y;
+        }
+
         Type x;
         Type y;
     };
@@ -70,9 +75,29 @@ namespace Math
             return Vector3(x / value, y / value, z / value);
         }
 
-        Type x;
-        Type y;
-        Type z;
+        bool IsUniform() const
+        {
+            return x == y && x == z;
+        }
+
+        union
+        {
+            struct  
+            {
+                Type x;
+                Type y;
+                Type z;
+            };
+
+            struct
+            {
+                Type r;
+                Type g;
+                Type b;
+            };
+
+            Type array[3];
+        };
     };
 
     using Vector3i = Vector3<int>;
@@ -110,10 +135,31 @@ namespace Math
             return Vector4(x / value, y / value, z / value, w / value);
         }
 
-        Type x;
-        Type y;
-        Type z;
-        Type w;
+        bool IsUniform() const
+        {
+            return x == y && x == z && x == w;
+        }
+
+        union
+        {
+            struct  
+            {
+                Type x;
+                Type y;
+                Type z;
+                Type w;
+            };
+
+            struct
+            {
+                Type r;
+                Type g;
+                Type b;
+                Type a;
+            };
+
+            Type array[4];
+        };
     };
 
     using Vector4i = Vector4<int>;
