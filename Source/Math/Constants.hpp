@@ -9,6 +9,6 @@ namespace Math
 
 namespace Color
 {
-    constexpr Math::Vector4f White = Math::Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
-    constexpr Math::Vector4f Black = Math::Vector4f(0.0f, 0.0f, 0.0f, 1.0f);
+    constexpr Math::Vec4f White = Math::Vec4f(1.0f, 1.0f, 1.0f, 1.0f);
+    constexpr Math::Vec4f Black = Math::Vec4f(0.0f, 0.0f, 0.0f, 1.0f);
 }

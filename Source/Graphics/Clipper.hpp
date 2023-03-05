@@ -12,6 +12,6 @@ namespace Graphics
         bool ClipPixel(int x, int y) const;
 
     private:
-        Math::Vector4i m_viewport;
+        Math::Vec4i m_viewport;
     };
 }

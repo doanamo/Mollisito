@@ -43,7 +43,7 @@ namespace Graphics
         return true;
     }
 
-    void Texture::Clear(const Math::Vector4f& color)
+    void Texture::Clear(const Math::Vec4f& color)
     {
         if(m_channelType == ChannelType::Uint8 && m_channelCount == 4)
         {
@@ -77,7 +77,7 @@ namespace Graphics
         }
     }
 
-    void Texture::SetPixel(int x, int y, const Math::Vector4f& color)
+    void Texture::SetPixel(int x, int y, const Math::Vec4f& color)
     {
         if(m_channelType == ChannelType::Uint8)
         {
@@ -97,9 +97,9 @@ namespace Graphics
         }
     }
 
-    Math::Vector4f Texture::GetPixel(int x, int y) const
+    Math::Vec4f Texture::GetPixel(int x, int y) const
     {
-        Math::Vector4f result = Color::Black;
+        Math::Vec4f result = Color::Black;
         if(m_channelType == ChannelType::Uint8)
         {
             const uint8_t* pixel = GetPixelAddress(x, y);

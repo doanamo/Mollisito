@@ -13,8 +13,8 @@ namespace Graphics
         ~Rasterizer() = default;
 
         void DrawLine(Texture& texture,
-            const Math::Vector2f& beginPosition, const Math::Vector2f& endPosition,
-            const Math::Vector4f& beginColor, const Math::Vector4f& endColor);
+            const Math::Vec2f& beginPosition, const Math::Vec2f& endPosition,
+            const Math::Vec4f& beginColor, const Math::Vec4f& endColor);
 
         Clipper& GetClipper()
         {

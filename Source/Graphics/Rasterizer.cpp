@@ -5,11 +5,11 @@
 namespace Graphics
 {
     void Rasterizer::DrawLine(Texture& texture,
-        const Math::Vector2f& beginPosition, const Math::Vector2f& endPosition,
-        const Math::Vector4f& beginColor, const Math::Vector4f& endColor)
+        const Math::Vec2f& beginPosition, const Math::Vec2f& endPosition,
+        const Math::Vec4f& beginColor, const Math::Vec4f& endColor)
     {
-        Math::Vector2f positionDiff = endPosition - beginPosition;
-        Math::Vector4f colorDiff = endColor - beginColor;
+        Math::Vec2f positionDiff = endPosition - beginPosition;
+        Math::Vec4f colorDiff = endColor - beginColor;
 
         int segments = (int)(std::max(
             std::abs(positionDiff.x),
@@ -18,8 +18,8 @@ namespace Graphics
         for(int i = 0; i <= segments; ++i)
         {
             float alpha = (float)i / (float)segments;
-            Math::Vector2f position = beginPosition + positionDiff * alpha;
-            Math::Vector4f color = beginColor + colorDiff * alpha;
+            Math::Vec2f position = beginPosition + positionDiff * alpha;
+            Math::Vec4f color = beginColor + colorDiff * alpha;
 
             if(m_clipper.ClipPixel((int)position.x, (int)position.y))
             {

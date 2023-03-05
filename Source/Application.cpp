@@ -35,28 +35,28 @@ void Application::OnFrame(float deltaTime)
 
     float width = (float)m_renderer.GetFrame().GetWidth();
     float height = (float)m_renderer.GetFrame().GetHeight();
-    Math::Vector2f position(width / 2.0f, height / 2.0f);
+    Math::Vec2f position(width / 2.0f, height / 2.0f);
 
     for(int i = 0; i < 60; ++i)
     {
         const float size = 5.0f + 15.0f * i;
         float rotation = rotationBase + (Math::Pi / 1.52f) * i;
 
-        Math::Vector2f p1(
+        Math::Vec2f p1(
             position.x + std::cos(rotation - Math::Pi / 6.0f) * size,
             position.y + std::sin(rotation - Math::Pi / 6.0f) * size);
 
-        Math::Vector2f p2(
+        Math::Vec2f p2(
             position.x + std::cos(rotation + Math::Pi / 2.0f) * size,
             position.y + std::sin(rotation + Math::Pi / 2.0f) * size);
 
-        Math::Vector2f p3(
+        Math::Vec2f p3(
             position.x + std::cos(rotation + Math::Pi + Math::Pi / 6.0f) * size,
             position.y + std::sin(rotation + Math::Pi + Math::Pi / 6.0f) * size);
 
-        auto c1 = Math::Vector4f(std::max(0.0f, 1.0f - 0.02f * i), 0.0f, 0.0f, 1.0f);
-        auto c2 = Math::Vector4f(0.0f, std::max(0.0f, 1.0f - 0.02f * i), 0.0f, 1.0f);
-        auto c3 = Math::Vector4f(0.0f, 0.0f, std::max(0.0f, 1.0f - 0.02f * i), 1.0f);
+        auto c1 = Math::Vec4f(std::max(0.0f, 1.0f - 0.02f * i), 0.0f, 0.0f, 1.0f);
+        auto c2 = Math::Vec4f(0.0f, std::max(0.0f, 1.0f - 0.02f * i), 0.0f, 1.0f);
+        auto c3 = Math::Vec4f(0.0f, 0.0f, std::max(0.0f, 1.0f - 0.02f * i), 1.0f);
 
         rasterizer.DrawLine(frame, p2, p3, c2, c3);
         rasterizer.DrawLine(frame, p3, p1, c3, c1);

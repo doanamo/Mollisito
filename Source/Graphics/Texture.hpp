@@ -17,9 +17,9 @@ namespace Graphics
 
         bool Setup(int width, int height, ChannelType channelType, int channelCount);
 
-        void Clear(const Math::Vector4f& color);
-        void SetPixel(int x, int y, const Math::Vector4f& color);
-        Math::Vector4f GetPixel(int x, int y) const;
+        void Clear(const Math::Vec4f& color);
+        void SetPixel(int x, int y, const Math::Vec4f& color);
+        Math::Vec4f GetPixel(int x, int y) const;
 
         int GetWidth() const
         {
