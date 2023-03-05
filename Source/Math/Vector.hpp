@@ -2,73 +2,122 @@
 
 namespace Math
 {
-    struct Vector2f
+    template<typename Type>
+    struct Vector2
     {
-        Vector2f() = default;
-        Vector2f(float x, float y)
+        Vector2() = default;
+        Vector2(Type x, Type y)
             : x(x)
             , y(y)
         {
         }
 
-        Vector2f operator+(const Vector2f& other) const
+        Vector2 operator+(const Vector2& other) const
         {
-            return Vector2f(x + other.x, y + other.y);
+            return Vector2(x + other.x, y + other.y);
         }
 
-        Vector2f operator-(const Vector2f& other) const
+        Vector2 operator-(const Vector2& other) const
         {
-            return Vector2f(x - other.x, y - other.y);
+            return Vector2(x - other.x, y - other.y);
         }
 
-        Vector2f operator*(float value) const
+        Vector2 operator*(Type value) const
         {
-            return Vector2f(x * value, y * value);
+            return Vector2(x * value, y * value);
         }
 
-        Vector2f operator/(float value) const
+        Vector2 operator/(Type value) const
         {
-            return Vector2f(x / value, y / value);
+            return Vector2(x / value, y / value);
         }
 
-        float x;
-        float y;
+        Type x;
+        Type y;
     };
 
-    struct Vector3f
+    using Vector2i = Vector2<int>;
+    using Vector2f = Vector2<float>;
+
+    template<typename Type>
+    struct Vector3
     {
-        Vector3f() = default;
-        Vector3f(float x, float y, float z)
+        Vector3() = default;
+        Vector3(Type x, Type y, Type z)
             : x(x)
             , y(y)
             , z(z)
         {
         }
 
-        Vector3f operator+(const Vector3f& other) const
+        Vector3 operator+(const Vector3& other) const
         {
-            return Vector3f(x + other.x, y + other.y, z + other.z);
+            return Vector3(x + other.x, y + other.y, z + other.z);
         }
 
-        Vector3f operator-(const Vector3f& other) const
+        Vector3 operator-(const Vector3& other) const
         {
-            return Vector3f(x - other.x, y - other.y, z - other.z);
+            return Vector3(x - other.x, y - other.y, z - other.z);
         }
 
-        Vector3f operator*(float value) const
+        Vector3 operator*(Type value) const
         {
-            return Vector3f(x * value, y * value, z * value);
+            return Vector3(x * value, y * value, z * value);
         }
 
-        Vector3f operator/(float value) const
+        Vector3 operator/(Type value) const
         {
-            return Vector3f(x / value, y / value, z / value);
+            return Vector3(x / value, y / value, z / value);
         }
 
-        float x;
-        float y;
-        float z;
+        Type x;
+        Type y;
+        Type z;
     };
+
+    using Vector3i = Vector3<int>;
+    using Vector3f = Vector3<float>;
+
+    template<typename Type>
+    struct Vector4
+    {
+        Vector4() = default;
+        Vector4(Type x, Type y, Type z, Type w)
+            : x(x)
+            , y(y)
+            , z(z)
+            , w(w)
+        {
+        }
+
+        Vector4 operator+(const Vector4& other) const
+        {
+            return Vector3(x + other.x, y + other.y, z + other.z, w + other.w);
+        }
+
+        Vector4 operator-(const Vector4& other) const
+        {
+            return Vector3(x - other.x, y - other.y, z - other.z, w - other.w);
+        }
+
+        Vector4 operator*(Type value) const
+        {
+            return Vector3(x * value, y * value, z * value, w * value);
+        }
+
+        Vector4 operator/(Type value) const
+        {
+            return Vector3(x / value, y / value, z / value, w / value);
+        }
+
+        Type x;
+        Type y;
+        Type z;
+        Type w;
+    };
+
+    using Vector4i = Vector4<int>;
+    using Vector4f = Vector4<float>;
 
     inline Vector2f Lerp(const Vector2f& a, const Vector2f& b, float alpha)
     {
