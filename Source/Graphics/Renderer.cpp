@@ -11,6 +11,10 @@ bool Graphics::Renderer::Setup(const SetupInfo& info)
         return false;
     }
 
+    // Set default viewport
+    m_rasterizer.GetClipper().SetViewport(
+        0, 0, info.windowWidth, info.windowHeight);
+
     return true;
 }
 

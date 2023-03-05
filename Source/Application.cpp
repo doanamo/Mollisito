@@ -15,6 +15,11 @@ bool Application::Setup(const SetupInfo& info)
         return false;
     }
 
+    // Clipping test
+    m_renderer.GetRasterizer().GetClipper().SetViewport(
+        (info.windowWidth - info.windowHeight) / 2 + 20, 20,
+        info.windowHeight - 40, info.windowHeight - 40);
+
     return true;
 }
 
@@ -33,7 +38,7 @@ void Application::OnFrame(float deltaTime)
     float height = (float)m_renderer.GetFrame().GetHeight();
     Math::Vector2f position(width / 2.0f, height / 2.0f);
 
-    for(int i = 0; i < 6; ++i)
+    for(int i = 0; i < 60; ++i)
     {
         const float size = 5.0f + 15.0f * i;
         float rotation = rotationBase + (Math::Pi / 1.52f) * i;
