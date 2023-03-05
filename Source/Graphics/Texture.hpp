@@ -1,10 +1,11 @@
 #pragma once
 
+#include "Common/NonCopyable.hpp"
 #include "Math/Color.hpp"
 
 namespace Graphics
 {
-    class Texture
+    class Texture : private Common::NonCopyable
     {
     public:
         enum class ChannelType

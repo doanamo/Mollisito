@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Graphics/Texture.hpp"
+#include "Graphics/Rasterizer.hpp"
 
 namespace Graphics
 {
@@ -19,15 +20,18 @@ namespace Graphics
         bool Setup(const SetupInfo& info);
         void ClearFrame();
 
-        void DrawLine(const Math::Vector2f& beginPosition, const Math::Vector2f& endPosition,
-            const Math::Color4f& beginColor, const Math::Color4f& endColor);
-
         Graphics::Texture& GetFrame()
         {
             return m_frame;
         }
 
+        Graphics::Rasterizer& GetRasterizer()
+        {
+            return m_rasterizer;
+        }
+
     private:
         Graphics::Texture m_frame;
+        Graphics::Rasterizer m_rasterizer;
     };
 }

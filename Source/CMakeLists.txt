@@ -16,6 +16,8 @@ set(SOURCE_FILES
     "Math/Constants.hpp"
     "Graphics/Texture.hpp"
     "Graphics/Texture.cpp"
+    "Graphics/Rasterizer.hpp"
+    "Graphics/Rasterizer.cpp"
     "Graphics/Renderer.hpp"
     "Graphics/Renderer.cpp"
     "Application.hpp"

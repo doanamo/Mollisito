@@ -22,6 +22,9 @@ void Application::OnFrame(float deltaTime)
 {
     m_renderer.ClearFrame();
 
+    Graphics::Texture& frame = m_renderer.GetFrame();
+    Graphics::Rasterizer& rasterizer = m_renderer.GetRasterizer();
+
     // Draw rotating triangle lines
     static float rotationBase = 0.0f;
     rotationBase += Math::Pi / 2.0f * deltaTime;
@@ -51,8 +54,8 @@ void Application::OnFrame(float deltaTime)
         auto c2 = Math::Color4f(0.0f, std::max(0.0f, 1.0f - 0.02f * i), 0.0f);
         auto c3 = Math::Color4f(0.0f, 0.0f, std::max(0.0f, 1.0f - 0.02f * i));
 
-        m_renderer.DrawLine(p1, p2, c1, c2);
-        m_renderer.DrawLine(p2, p3, c2, c3);
-        m_renderer.DrawLine(p3, p1, c3, c1);
+        rasterizer.DrawLine(frame, p2, p3, c2, c3);
+        rasterizer.DrawLine(frame, p3, p1, c3, c1);
+        rasterizer.DrawLine(frame, p1, p2, c1, c2);
     }
 }
