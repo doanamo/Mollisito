@@ -58,8 +58,8 @@ void Application::OnFrame(float deltaTime)
         auto c2 = Math::Vec4f(0.0f, std::max(0.0f, 1.0f - 0.02f * i), 0.0f, 1.0f);
         auto c3 = Math::Vec4f(0.0f, 0.0f, std::max(0.0f, 1.0f - 0.02f * i), 1.0f);
 
-        rasterizer.DrawLine(frame, p2, p3, c2, c3);
-        rasterizer.DrawLine(frame, p3, p1, c3, c1);
-        rasterizer.DrawLine(frame, p1, p2, c1, c2);
+        rasterizer.DrawLine2D(frame, p2, p3, c2, c3);
+        rasterizer.DrawLine2D(frame, p3, p1, c3, c1);
+        rasterizer.DrawLine2D(frame, p1, p2, c1, c2);
     }
 }

@@ -7,4 +7,10 @@ namespace Math
     {
         return a + (b - a) * alpha;
     }
+
+    template<typename Type>
+    Type LerpDiff(const Type& a, const Type& diff, float alpha)
+    {
+        return a + diff * alpha;
+    }
 }
