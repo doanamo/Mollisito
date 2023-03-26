@@ -14,11 +14,6 @@ bool Application::Setup(const SetupInfo& info)
         return false;
     }
 
-    // Clipping test
-    m_renderer.GetRasterizer().GetClipper().SetViewport(
-        (info.windowWidth - info.windowHeight) / 2 + 20, 20,
-        info.windowHeight - 40, info.windowHeight - 40);
-
     return true;
 }
 
@@ -36,6 +31,11 @@ void Application::OnFrame(float deltaTime)
     float width = (float)m_renderer.GetFrame().GetWidth();
     float height = (float)m_renderer.GetFrame().GetHeight();
     Math::Vec2f position(width / 2.0f, height / 2.0f);
+
+    m_renderer.GetRasterizer().GetClipper().EnableScissor(true);
+    m_renderer.GetRasterizer().GetClipper().SetScissor(
+        (int)(width - height) / 2 + 20, 20,
+        (int)height - 40, (int)height - 40);
 
     for(int i = 0; i < 60; ++i)
     {
@@ -68,11 +68,6 @@ bool Application::OnResize(int windowWidth, int windowHeight)
 {
     if(!m_renderer.Resize(windowWidth, windowHeight))
         return false;
-
-    // Clipping test
-    m_renderer.GetRasterizer().GetClipper().SetViewport(
-        (windowWidth - windowHeight) / 2 + 20, 20,
-        windowHeight - 40, windowHeight - 40);
 
     return true;
 }

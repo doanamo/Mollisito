@@ -3,14 +3,27 @@
 
 namespace Graphics
 {
-    void Clipper::SetViewport(int x, int y, int width, int height)
+    void Clipper::SetScissor(int x, int y, int width, int height)
     {
-        m_viewport = { x, y, x + width, y + height };
+        m_scissor = { x, y, x + width, y + height };
+    }
+
+    void Clipper::EnableScissor(bool enable)
+    {
+        m_scissorEnabled = enable;
     }
 
     bool Clipper::ClipPixel(int x, int y) const
     {
-        return x < m_viewport.x || y < m_viewport.y ||
-            x >= m_viewport.z || y >= m_viewport.w;
+        if(m_scissorEnabled)
+        {
+            if(x < m_scissor.x || y < m_scissor.y ||
+                x >= m_scissor.z || y >= m_scissor.w)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
