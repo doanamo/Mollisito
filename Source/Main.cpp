@@ -68,6 +68,11 @@ int main(int argc, char* args[])
         }
     }
 
+    SCOPE_GUARD([renderer]()
+    {
+        SDL_DestroyRenderer(renderer);
+    });
+
     // Create application instance
     Application::SetupInfo applicationSetup{};
     applicationSetup.windowWidth = windowWidth;
@@ -84,6 +89,14 @@ int main(int argc, char* args[])
 
     // Create frame texture
     SDL_Texture* frameTexture = nullptr;
+    auto createFrameTexture = [&]()
+    {
+        if(frameTexture)
+        {
+            SDL_DestroyTexture(frameTexture);
+            frameTexture = nullptr;
+        }
+
     if(enableHardwarePresent)
     {
         frameTexture = SDL_CreateTexture(renderer,
@@ -100,10 +113,29 @@ int main(int argc, char* args[])
         SDL_SetTextureScaleMode(frameTexture, SDL_ScaleModeNearest);
     }
 
+        return true;
+    };
+
+    if(!createFrameTexture())
+        return 1;
+
+    SCOPE_GUARD([frameTexture]()
+    {
+        SDL_DestroyTexture(frameTexture);
+    });
+
     // Create frame surface
     // It will be used to blit into window surface. We could avoid allocating
     // this, but then we would lose scaling functionality provided by SDL.
     SDL_Surface* frameSurface = nullptr;
+    auto createFrameSurface = [&]()
+    {
+        if(frameSurface)
+        {
+            SDL_FreeSurface(frameSurface);
+            frameSurface = nullptr;
+        }
+
     if(!enableHardwarePresent)
     {
         frameSurface = SDL_CreateRGBSurface(
@@ -113,9 +145,20 @@ int main(int argc, char* args[])
         if(!frameSurface)
         {
             LOG_CRITICAL("Failed to create SDL surface");
-            return 1;
+                return false;
         }
     }
+
+        return true;
+    };
+
+    if(!createFrameSurface())
+        return 1;
+
+    SCOPE_GUARD([frameSurface]()
+    {
+        SDL_FreeSurface(frameSurface);
+    });
 
     // Start main loop
     uint64_t timeCurrent = SDL_GetPerformanceCounter();
