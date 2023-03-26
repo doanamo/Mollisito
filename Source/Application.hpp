@@ -13,9 +13,10 @@ public:
         int windowWidth = 0;
         int windowHeight = 0;
     };
-
+     
     bool Setup(const SetupInfo& info);
     void OnFrame(float deltaTime);
+    bool OnResize(int windowWidth, int windowHeight);
 
     Graphics::Renderer& GetRenderer()
     {

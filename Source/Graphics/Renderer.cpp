@@ -18,6 +18,22 @@ bool Graphics::Renderer::Setup(const SetupInfo& info)
     return true;
 }
 
+bool Graphics::Renderer::Resize(int windowWidth, int windowHeight)
+{
+    // Resize frame texture
+    if(!m_frame.Resize(windowWidth, windowHeight))
+    {
+        LOG_ERROR("Failed to resize frame texture");
+        return false;
+    }
+
+    // Set default viewport
+    m_rasterizer.GetClipper().SetViewport(
+        0, 0, windowWidth, windowHeight);
+    
+    return true;
+}
+
 void Graphics::Renderer::ClearFrame()
 {
     m_frame.Clear(Math::Vec4f(0.0f, 0.0f, 0.0f, 0.0f));

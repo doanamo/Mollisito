@@ -97,21 +97,21 @@ int main(int argc, char* args[])
             frameTexture = nullptr;
         }
 
-    if(enableHardwarePresent)
-    {
-        frameTexture = SDL_CreateTexture(renderer,
-            SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING,
-            frame.GetWidth(), frame.GetHeight());
-
-        if(!frameTexture)
+        if(enableHardwarePresent)
         {
-            LOG_WARNING("Failed to create SDL texture");
-            LOG_WARNING("Falling back to software present");
-            enableHardwarePresent = false;
-        }
+            frameTexture = SDL_CreateTexture(renderer,
+                SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING,
+                frame.GetWidth(), frame.GetHeight());
 
-        SDL_SetTextureScaleMode(frameTexture, SDL_ScaleModeNearest);
-    }
+            if(!frameTexture)
+            {
+                LOG_WARNING("Failed to create SDL texture");
+                LOG_WARNING("Falling back to software present");
+                enableHardwarePresent = false;
+            }
+
+            SDL_SetTextureScaleMode(frameTexture, SDL_ScaleModeNearest);
+        }
 
         return true;
     };
@@ -136,18 +136,18 @@ int main(int argc, char* args[])
             frameSurface = nullptr;
         }
 
-    if(!enableHardwarePresent)
-    {
-        frameSurface = SDL_CreateRGBSurface(
-            0, frame.GetWidth(), frame.GetHeight(), 32,
-            0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
-
-        if(!frameSurface)
+        if(!enableHardwarePresent)
         {
-            LOG_CRITICAL("Failed to create SDL surface");
+            frameSurface = SDL_CreateRGBSurface(
+                0, frame.GetWidth(), frame.GetHeight(), 32,
+                0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
+
+            if(!frameSurface)
+            {
+                LOG_CRITICAL("Failed to create SDL surface");
                 return false;
+            }
         }
-    }
 
         return true;
     };
@@ -165,8 +165,7 @@ int main(int argc, char* args[])
     uint64_t timePrevious = timeCurrent;
     float frameRateUpdateDelay = 0.1f;
 
-    bool quit = false;
-    while(!quit)
+    while(true)
     {
         // Calculate delta time
         timePrevious = timeCurrent;
@@ -187,13 +186,37 @@ int main(int argc, char* args[])
         }
 
         // Process events
+        bool quit = false;
+
         SDL_Event event;
         while(SDL_PollEvent(&event))
         {
             if(event.type == SDL_QUIT)
             {
+                LOG_INFO("Application exit requested by user");
                 quit = true;
             }
+            else if(event.type == SDL_WINDOWEVENT)
+            {
+                if(event.window.event == SDL_WINDOWEVENT_RESIZED)
+                {
+                    windowWidth = event.window.data1;
+                    windowHeight = event.window.data2;
+                    LOG_INFO("Window size changed to {}x{}", windowWidth, windowHeight);
+
+                    if(!application.OnResize(windowWidth, windowHeight) ||
+                        !createFrameTexture() || !createFrameSurface())
+                    {
+                        LOG_CRITICAL("Failed to resize window");
+                        quit = true;
+                    }
+                }
+            }
+        }
+
+        if(quit)
+        {
+            break;
         }
 
         // Frame processing

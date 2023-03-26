@@ -5,11 +5,6 @@ namespace Graphics
 {
     bool Texture::Setup(int width, int height, ChannelType channelType, int channelCount)
     {
-        if(width < 0 || height < 0)
-        {
-            return false;
-        }
-
         if(channelType == ChannelType::Invalid)
         {
             return false;
@@ -32,11 +27,27 @@ namespace Graphics
             break;
         }
 
-        m_width = width;
-        m_height = height;
         m_channelType = channelType;
         m_channelSize = channelSize;
         m_channelCount = channelCount;
+
+        if(!Resize(width, height))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    bool Texture::Resize(int width, int height)
+    {
+        if(width < 0 || height < 0)
+        {
+            return false;
+        }
+
+        m_width = width;
+        m_height = height;
 
         m_data.resize(m_width * m_height * m_channelSize * m_channelCount);
 

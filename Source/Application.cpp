@@ -63,3 +63,16 @@ void Application::OnFrame(float deltaTime)
         rasterizer.DrawLine2D(frame, p1, p2, c1, c2);
     }
 }
+
+bool Application::OnResize(int windowWidth, int windowHeight)
+{
+    if(!m_renderer.Resize(windowWidth, windowHeight))
+        return false;
+
+    // Clipping test
+    m_renderer.GetRasterizer().GetClipper().SetViewport(
+        (windowWidth - windowHeight) / 2 + 20, 20,
+        windowHeight - 40, windowHeight - 40);
+
+    return true;
+}

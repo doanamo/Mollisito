@@ -16,6 +16,7 @@ namespace Graphics
         ~Texture() = default;
 
         bool Setup(int width, int height, ChannelType channelType, int channelCount);
+        bool Resize(int width, int height);
 
         void Clear(const Math::Vec4f& color);
         void SetPixel(int x, int y, const Math::Vec4f& color);

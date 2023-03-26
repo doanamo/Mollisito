@@ -18,6 +18,7 @@ namespace Graphics
         };
 
         bool Setup(const SetupInfo& info);
+        bool Resize(int windowWidth, int windowHeight);
         void ClearFrame();
 
         Graphics::Texture& GetFrame()
