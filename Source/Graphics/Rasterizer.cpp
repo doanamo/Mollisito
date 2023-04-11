@@ -4,7 +4,7 @@
 
 namespace Graphics
 {
-    void Rasterizer::DrawLine2D(Texture& texture,
+    void Rasterizer::DrawLine(Texture& texture,
         const Math::Vec2f& beginPosition, const Math::Vec2f& endPosition,
         const Math::Vec4f& beginColor, const Math::Vec4f& endColor)
     {
