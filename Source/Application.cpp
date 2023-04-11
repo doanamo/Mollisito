@@ -22,6 +22,7 @@ void Application::OnFrame(float deltaTime)
     m_renderer.ClearFrame();
 
     Graphics::Texture& frame = m_renderer.GetFrame();
+    Graphics::Clipper& clipper = m_renderer.GetClipper();
     Graphics::Rasterizer& rasterizer = m_renderer.GetRasterizer();
 
     // Draw rotating triangle lines
@@ -32,8 +33,8 @@ void Application::OnFrame(float deltaTime)
     float height = (float)m_renderer.GetFrame().GetHeight();
     Math::Vec2f position(width / 2.0f, height / 2.0f);
 
-    m_renderer.GetRasterizer().GetClipper().EnableScissor(true);
-    m_renderer.GetRasterizer().GetClipper().SetScissor(
+    clipper.EnableScissor(true);
+    clipper.SetScissor(
         (int)(width - height) / 2 + 20, 20,
         (int)height - 40, (int)height - 40);
 

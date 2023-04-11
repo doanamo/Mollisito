@@ -11,8 +11,6 @@ namespace Graphics
         void SetScissor(int x, int y, int width, int height);
         void EnableScissor(bool enable);
 
-        bool ClipPixel(int x, int y) const;
-
     private:
         Math::Vec4i m_scissor;
         bool m_scissorEnabled = false;

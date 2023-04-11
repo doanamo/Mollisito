@@ -12,18 +12,4 @@ namespace Graphics
     {
         m_scissorEnabled = enable;
     }
-
-    bool Clipper::ClipPixel(int x, int y) const
-    {
-        if(m_scissorEnabled)
-        {
-            if(x < m_scissor.x || y < m_scissor.y ||
-                x >= m_scissor.z || y >= m_scissor.w)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

@@ -21,18 +21,24 @@ namespace Graphics
         bool Resize(int windowWidth, int windowHeight);
         void ClearFrame();
 
-        Graphics::Texture& GetFrame()
+        Texture& GetFrame()
         {
             return m_frame;
         }
 
-        Graphics::Rasterizer& GetRasterizer()
+        Clipper& GetClipper()
+        {
+            return m_clipper;
+        }
+
+        Rasterizer& GetRasterizer()
         {
             return m_rasterizer;
         }
 
     private:
-        Graphics::Texture m_frame;
-        Graphics::Rasterizer m_rasterizer;
+        Texture m_frame;
+        Clipper m_clipper;
+        Rasterizer m_rasterizer;
     };
 }

@@ -22,11 +22,6 @@ namespace Graphics
             Math::Vec2f position = Math::LerpDiff(beginPosition, positionDiff, alpha);
             Math::Vec4f color = Math::LerpDiff(beginColor, colorDiff, alpha);
 
-            if(m_clipper.ClipPixel((int)position.x, (int)position.y))
-            {
-                continue;
-            }
-
             texture.SetPixel((int)position.x, (int)position.y, color);
         }
     }
