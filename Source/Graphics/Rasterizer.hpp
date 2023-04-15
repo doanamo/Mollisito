@@ -11,9 +11,5 @@ namespace Graphics
     public:
         Rasterizer() = default;
         ~Rasterizer() = default;
-
-        void DrawLine(Texture& texture,
-            const Math::Vec2f& beginPosition, const Math::Vec2f& endPosition,
-            const Math::Vec4f& beginColor, const Math::Vec4f& endColor);
     };
 }
