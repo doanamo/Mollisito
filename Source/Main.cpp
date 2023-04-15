@@ -46,7 +46,7 @@ int main(int argc, char* args[])
     int windowWidth;
     int windowHeight;
     SDL_GetWindowSizeInPixels(window, &windowWidth, &windowHeight);
-    LOG_INFO("Create window with {}x{} size", windowWidth, windowHeight);
+    LOG_INFO("Created window with {}x{} size", windowWidth, windowHeight);
 
     // Create hardware renderer for presenting
     SDL_Renderer* renderer = nullptr;
@@ -59,6 +59,22 @@ int main(int argc, char* args[])
         }
 
         renderer = SDL_CreateRenderer(window, -1, flags);
+
+        SDL_RendererInfo rendererInfo;
+        if(SDL_GetRendererInfo(renderer, &rendererInfo) == 0)
+        {
+            LOG_INFO("Created SDL renderer: {}", rendererInfo.name);
+            LOG_INFO("Renderer hardware acceleration: {}",
+                (rendererInfo.flags & SDL_RENDERER_ACCELERATED) != 0);
+            LOG_INFO("Renderer present vsync: {}",
+                (rendererInfo.flags & SDL_RENDERER_PRESENTVSYNC) != 0);
+            LOG_INFO("Renderer available texture formats:");
+            for(uint32_t i = 0; i < rendererInfo.num_texture_formats; ++i)
+            {
+                LOG_INFO("  {}", SDL_GetPixelFormatName(
+                    rendererInfo.texture_formats[i]));
+            }
+        }
 
         if(!renderer)
         {
@@ -225,6 +241,7 @@ int main(int argc, char* args[])
         // Present frame
         if(enableHardwarePresent)
         {
+            // Update and render texture to screen 
             SDL_UpdateTexture(frameTexture, nullptr, frame.GetData(), frame.GetPitch());
             SDL_RenderCopy(renderer, frameTexture, nullptr, nullptr);
             SDL_RenderPresent(renderer);
