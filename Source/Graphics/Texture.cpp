@@ -5,13 +5,9 @@ namespace Graphics
 {
     bool Texture::Setup(int width, int height, ChannelType channelType, int channelCount)
     {
-        if(channelType == ChannelType::Invalid)
+        if(channelCount < 0 || channelCount > 4)
         {
-            return false;
-        }
-
-        if(channelCount < 0 || channelCount > 8)
-        {
+            LOG_ERROR("Failed to setup texture due to invalid channel count");
             return false;
         }
 
@@ -25,6 +21,10 @@ namespace Graphics
         case ChannelType::Float:
             channelSize = sizeof(float);
             break;
+
+        default:
+            LOG_ERROR("Failed to setup texture due to invalid channel type");
+            return false;
         }
 
         m_channelType = channelType;
@@ -33,6 +33,7 @@ namespace Graphics
 
         if(!Resize(width, height))
         {
+            LOG_ERROR("Failed to setup texture due to invalid dimensions");
             return false;
         }
 
