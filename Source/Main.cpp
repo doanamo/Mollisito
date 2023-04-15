@@ -38,9 +38,10 @@ int main(int argc, char* args[])
         return 1;
     }
 
-    SCOPE_GUARD([window]()
+    SCOPE_GUARD([&window]()
     {
         SDL_DestroyWindow(window);
+        window = nullptr;
     });
 
     int windowWidth;
@@ -59,24 +60,25 @@ int main(int argc, char* args[])
         }
 
         renderer = SDL_CreateRenderer(window, -1, flags);
-
-        SDL_RendererInfo rendererInfo;
-        if(SDL_GetRendererInfo(renderer, &rendererInfo) == 0)
+        if(renderer)
         {
-            LOG_INFO("Created SDL renderer: {}", rendererInfo.name);
-            LOG_INFO("Renderer hardware acceleration: {}",
-                (rendererInfo.flags & SDL_RENDERER_ACCELERATED) != 0);
-            LOG_INFO("Renderer present vsync: {}",
-                (rendererInfo.flags & SDL_RENDERER_PRESENTVSYNC) != 0);
-            LOG_INFO("Renderer available texture formats:");
-            for(uint32_t i = 0; i < rendererInfo.num_texture_formats; ++i)
+            SDL_RendererInfo rendererInfo;
+            if(SDL_GetRendererInfo(renderer, &rendererInfo) == 0)
             {
-                LOG_INFO("  {}", SDL_GetPixelFormatName(
-                    rendererInfo.texture_formats[i]));
+                LOG_INFO("Created SDL renderer: {}", rendererInfo.name);
+                LOG_INFO("Renderer hardware acceleration: {}",
+                    (rendererInfo.flags & SDL_RENDERER_ACCELERATED) != 0);
+                LOG_INFO("Renderer present vsync: {}",
+                    (rendererInfo.flags & SDL_RENDERER_PRESENTVSYNC) != 0);
+                LOG_INFO("Renderer available texture formats:");
+                for(uint32_t i = 0; i < rendererInfo.num_texture_formats; ++i)
+                {
+                    LOG_INFO("  {}", SDL_GetPixelFormatName(
+                        rendererInfo.texture_formats[i]));
+                }
             }
         }
-
-        if(!renderer)
+        else
         {
             LOG_WARNING("Failed to create SDL renderer");
             LOG_WARNING("Falling back to software present");
@@ -84,9 +86,10 @@ int main(int argc, char* args[])
         }
     }
 
-    SCOPE_GUARD([renderer]()
+    SCOPE_GUARD([&renderer]()
     {
         SDL_DestroyRenderer(renderer);
+        renderer = nullptr;
     });
 
     // Create application instance
@@ -116,7 +119,7 @@ int main(int argc, char* args[])
         if(enableHardwarePresent)
         {
             frameTexture = SDL_CreateTexture(renderer,
-                SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING,
+                SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING,
                 frame.GetWidth(), frame.GetHeight());
 
             if(!frameTexture)
@@ -135,9 +138,10 @@ int main(int argc, char* args[])
     if(!createFrameTexture())
         return 1;
 
-    SCOPE_GUARD([frameTexture]()
+    SCOPE_GUARD([&frameTexture]()
     {
         SDL_DestroyTexture(frameTexture);
+        frameTexture = nullptr;
     });
 
     // Create frame surface
@@ -154,9 +158,9 @@ int main(int argc, char* args[])
 
         if(!enableHardwarePresent)
         {
-            frameSurface = SDL_CreateRGBSurface(
+            frameSurface = SDL_CreateRGBSurfaceWithFormat(
                 0, frame.GetWidth(), frame.GetHeight(), 32,
-                0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
+                SDL_PIXELFORMAT_ARGB8888);
 
             if(!frameSurface)
             {
@@ -171,9 +175,10 @@ int main(int argc, char* args[])
     if(!createFrameSurface())
         return 1;
 
-    SCOPE_GUARD([frameSurface]()
+    SCOPE_GUARD([&frameSurface]()
     {
         SDL_FreeSurface(frameSurface);
+        frameSurface = nullptr;
     });
 
     // Start main loop

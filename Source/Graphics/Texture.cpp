@@ -65,10 +65,10 @@ namespace Graphics
             }
             else
             {
-                uint32_t value = (uint8_t)(color.r * 255.0f);
-                value |= (uint8_t)(color.g * 255.0f) << 8;
-                value |= (uint8_t)(color.b * 255.0f) << 16;
-                value |= (uint8_t)(color.a * 255.0f) << 24;
+                uint32_t value = (uint8_t)(color.a * 255.0f);
+                value |= (uint8_t)(color.r * 255.0f) << 8;
+                value |= (uint8_t)(color.g * 255.0f) << 16;
+                value |= (uint8_t)(color.b * 255.0f) << 24;
 
                 for(int i = 0; i < m_width * m_height; ++i)
                 {

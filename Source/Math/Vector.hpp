@@ -138,7 +138,7 @@ namespace Math
 
             struct
             {
-                Type r, g, b, a;
+                Type a, r, g, b;
             };
 
             Type array[4];
