@@ -78,6 +78,8 @@ int main(int argc, char* args[])
         renderer = nullptr;
     });
 
+    SDL_RenderSetVSync(renderer, requestPresentVsync ? SDL_TRUE : SDL_FALSE);
+
     SDL_RendererInfo rendererInfo;
     if(SDL_GetRendererInfo(renderer, &rendererInfo) != 0)
     {
@@ -234,7 +236,6 @@ int main(int argc, char* args[])
 
         // Present frame
         SDL_RenderCopy(renderer, texture, nullptr, nullptr);
-        SDL_RenderSetVSync(renderer, requestPresentVsync ? SDL_TRUE : SDL_FALSE);
         SDL_RenderPresent(renderer);
     }
 
