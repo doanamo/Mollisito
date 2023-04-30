@@ -6,7 +6,7 @@ int main(int argc, char* args[])
     Common::SetupLogger();
 
     // Global flags
-    bool requestHardwarePresent = false;
+    bool requestHardwarePresent = true;
     bool requestPresentVsync = false;
 
     // Initialize SDL
@@ -54,6 +54,7 @@ int main(int argc, char* args[])
     if(requestHardwarePresent)
     {
         rendererFlags |= SDL_RENDERER_ACCELERATED;
+        SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
     }
     else
     {
@@ -110,7 +111,7 @@ int main(int argc, char* args[])
             texture = nullptr;
         }
 
-        texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
+        texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32,
             SDL_TEXTUREACCESS_STREAMING, windowWidth, windowHeight);
 
         if(!texture)
