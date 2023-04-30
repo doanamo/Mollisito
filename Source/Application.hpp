@@ -5,18 +5,23 @@
 class Application
 {
 public:
+    struct SetupInfo
+    {
+        Graphics::Renderer::SetupInfo renderer;
+    };
+
+    struct ResizeInfo
+    {
+        Graphics::Texture::BufferInfo frameBuffer;
+    };
+
+public:
     Application() = default;
     ~Application() = default;
 
-    struct SetupInfo
-    {
-        int windowWidth = 0;
-        int windowHeight = 0;
-    };
-
     bool Setup(const SetupInfo& info);
     void OnFrame(float deltaTime);
-    bool OnResize(int windowWidth, int windowHeight);
+    bool OnResize(const ResizeInfo& info);
 
     Graphics::Renderer& GetRenderer()
     {

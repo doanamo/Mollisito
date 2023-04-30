@@ -8,18 +8,18 @@ namespace Graphics
     class Renderer
     {
     public:
+        struct SetupInfo
+        {
+            Texture::BufferInfo frameBuffer;
+        };
+
+    public:
         Renderer() = default;
         ~Renderer() = default;
 
-        struct SetupInfo
-        {
-            int windowWidth = 0;
-            int windowHeight = 0;
-        };
-
         bool Setup(const SetupInfo& info);
-        bool Resize(int windowWidth, int windowHeight);
-        void ClearFrame();
+        bool Resize(const Texture::BufferInfo& info);
+        void ClearFrame(const Math::Vec4f& color);
 
         Texture& GetFrame()
         {

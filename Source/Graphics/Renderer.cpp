@@ -4,8 +4,12 @@
 bool Graphics::Renderer::Setup(const SetupInfo& info)
 {
     // Create frame texture
-    if(!m_frame.Setup(info.windowWidth, info.windowHeight,
-        Graphics::Texture::ChannelType::Uint8, 4))
+    Texture::SetupInfo frameInfo;
+    frameInfo.buffer = info.frameBuffer;
+    frameInfo.channelType = Graphics::Texture::ChannelType::Uint8;
+    frameInfo.channelCount = 4;
+
+    if(!m_frame.Setup(frameInfo))
     {
         LOG_ERROR("Failed to create frame texture");
         return false;
@@ -14,10 +18,9 @@ bool Graphics::Renderer::Setup(const SetupInfo& info)
     return true;
 }
 
-bool Graphics::Renderer::Resize(int windowWidth, int windowHeight)
+bool Graphics::Renderer::Resize(const Texture::BufferInfo& info)
 {
-    // Resize frame texture
-    if(!m_frame.Resize(windowWidth, windowHeight))
+    if(!m_frame.Resize(info))
     {
         LOG_ERROR("Failed to resize frame texture");
         return false;
@@ -26,7 +29,7 @@ bool Graphics::Renderer::Resize(int windowWidth, int windowHeight)
     return true;
 }
 
-void Graphics::Renderer::ClearFrame()
+void Graphics::Renderer::ClearFrame(const Math::Vec4f& color)
 {
-    m_frame.Clear(Math::Vec4f(0.0f, 0.0f, 0.0f, 0.0f));
+    m_frame.Clear(color);
 }

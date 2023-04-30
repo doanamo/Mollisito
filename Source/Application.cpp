@@ -3,12 +3,7 @@
 
 bool Application::Setup(const SetupInfo& info)
 {
-    // Setup renderer
-    Graphics::Renderer::SetupInfo rendererSetup;
-    rendererSetup.windowWidth = info.windowWidth;
-    rendererSetup.windowHeight = info.windowHeight;
-
-    if(!m_renderer.Setup(rendererSetup))
+    if(!m_renderer.Setup(info.renderer))
     {
         LOG_ERROR("Failed to setup renderer");
         return false;
@@ -19,12 +14,15 @@ bool Application::Setup(const SetupInfo& info)
 
 void Application::OnFrame(float deltaTime)
 {
-    m_renderer.ClearFrame();
+    m_renderer.ClearFrame(Math::Vec4f(0.0f, 0.0f, 0.0f, 0.0f));
 }
 
-bool Application::OnResize(int windowWidth, int windowHeight)
+bool Application::OnResize(const ResizeInfo& info)
 {
-    if(!m_renderer.Resize(windowWidth, windowHeight))
+    Graphics::Texture::BufferInfo frameBufferInfo;
+    frameBufferInfo = info.frameBuffer;
+
+    if(!m_renderer.Resize(frameBufferInfo))
         return false;
 
     return true;

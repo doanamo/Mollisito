@@ -12,33 +12,31 @@ namespace Graphics
             Float,
         };
 
+        struct BufferInfo
+        {
+            int width = 0;
+            int height = 0;
+            int pitch = 0;
+            void* pixels = nullptr;
+        };
+
+        struct SetupInfo
+        {
+            ChannelType channelType = ChannelType::Invalid;
+            int channelCount = 0;
+            BufferInfo buffer;
+        };
+
+    public:
         Texture() = default;
         ~Texture() = default;
 
-        bool Setup(int width, int height, ChannelType channelType, int channelCount);
-        bool Resize(int width, int height);
+        bool Setup(const SetupInfo& info);
+        bool Resize(const BufferInfo& info);
 
         void Clear(const Math::Vec4f& color);
         void SetPixel(int x, int y, const Math::Vec4f& color);
         Math::Vec4f GetPixel(int x, int y) const;
-
-        int GetWidth() const
-        {
-            ASSERT(m_width);
-            return m_width;
-        }
-
-        int GetHeight() const
-        {
-            ASSERT(m_height);
-            return m_height;
-        }
-
-        int GetPitch() const
-        {
-            ASSERT(m_width);
-            return m_width * GetChannelSize() * GetChannelCount();
-        }
 
         ChannelType GetChannelType() const
         {
@@ -46,16 +44,34 @@ namespace Graphics
             return m_channelType;
         }
 
+        int GetChannelCount() const
+        {
+            ASSERT(m_channelCount > 0);
+            return m_channelCount;
+        }
+
         int GetChannelSize() const
         {
-            ASSERT(m_channelSize);
+            ASSERT(m_channelSize > 0);
             return m_channelSize;
         }
 
-        int GetChannelCount() const
+        int GetWidth() const
         {
-            ASSERT(m_channelCount);
-            return m_channelCount;
+            ASSERT(m_width > 0);
+            return m_width;
+        }
+
+        int GetHeight() const
+        {
+            ASSERT(m_height > 0);
+            return m_height;
+        }
+
+        int GetPitch() const
+        {
+            ASSERT(m_pitch > 0);
+            return m_pitch;
         }
 
         uint8_t* GetPixelAddress(int x, int y)
@@ -66,44 +82,52 @@ namespace Graphics
 
         const uint8_t* GetPixelAddress(int x, int y) const
         {
-            ASSERT(x >= 0 && x < m_width);
-            ASSERT(y >= 0 && y < m_height);
-            return GetPixelAddress(y * m_width + x);
+            ASSERT(x >= 0 && x < GetWidth());
+            ASSERT(y >= 0 && y < GetHeight());
+            return GetPixelAddress(y * GetWidth() + x);
         }
 
-        uint8_t* GetPixelAddress(size_t index)
+        uint8_t* GetPixelAddress(int index)
         {
             return const_cast<uint8_t*>(
                 std::as_const(*this).GetPixelAddress(index));
         }
 
-        const uint8_t* GetPixelAddress(size_t index) const
+        const uint8_t* GetPixelAddress(int index) const
         {
-            size_t pixelIndex = GetChannelSize() * m_channelCount * index;
-            ASSERT(pixelIndex >= 0 && pixelIndex < m_data.size());
-            return &m_data[pixelIndex];
+            int pixelIndex = GetPixelSize() * index;
+            ASSERT(pixelIndex >= 0 && pixelIndex < GetSize());
+            return &GetPixels()[pixelIndex];
         }
 
-        const uint8_t* GetData() const
+        const uint8_t* GetPixels() const
         {
-            ASSERT(!m_data.empty());
-            return m_data.data();
+            ASSERT(m_pixelsPtr);
+            return m_pixelsPtr;
         }
 
-        size_t GetDataSize() const
+        int GetPixelSize() const
         {
-            ASSERT(!m_data.empty());
-            return m_data.size();
+            ASSERT(m_pixelSize > 0);
+            return m_pixelSize;
+        }
+
+        int GetSize() const
+        {
+            return GetHeight() * GetPitch();
         }
 
     private:
+        ChannelType m_channelType = ChannelType::Invalid;
+        int m_channelCount = 0;
+        int m_channelSize = 0;
+
         int m_width = 0;
         int m_height = 0;
+        int m_pitch = 0;
 
-        ChannelType m_channelType = ChannelType::Invalid;
-        int m_channelSize = 0;
-        int m_channelCount = 0;
-
-        std::vector<uint8_t> m_data;
+        std::vector<uint8_t> m_pixels;
+        uint8_t* m_pixelsPtr = nullptr;
+        int m_pixelSize = 0;
     };
 }
