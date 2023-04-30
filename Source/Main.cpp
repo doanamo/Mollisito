@@ -6,10 +6,10 @@ int main(int argc, char* args[])
     Common::SetupLogger();
 
     // Global flags
-    bool enableHardwarePresent = true;
-    bool enableHardwarePresentVsync = false;
+    bool requestHardwarePresent = true;
+    bool requestPresentVsync = false;
 
-    // Initialize SDL library
+    // Initialize SDL
     if(SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         LOG_CRITICAL("Failed to initialize SDL library");
@@ -26,7 +26,7 @@ int main(int argc, char* args[])
     LOG_INFO("Initialized SDL {}.{}.{} library",
         sdlVersion.major, sdlVersion.minor, sdlVersion.patch);
 
-    // Create application window
+    // Create window
     const char* windowTitle = "Game";
     SDL_Window* window = SDL_CreateWindow(windowTitle,
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1024, 576,
@@ -49,41 +49,27 @@ int main(int argc, char* args[])
     SDL_GetWindowSizeInPixels(window, &windowWidth, &windowHeight);
     LOG_INFO("Created window with {}x{} size", windowWidth, windowHeight);
 
-    // Create hardware renderer for presenting
-    SDL_Renderer* renderer = nullptr;
-    if(enableHardwarePresent)
+    // Create renderer
+    uint32_t rendererFlags = 0;
+    if(requestHardwarePresent)
     {
-        uint32_t flags = SDL_RENDERER_ACCELERATED;
-        if(enableHardwarePresentVsync)
-        {
-            flags |= SDL_RENDERER_PRESENTVSYNC;
-        }
+        rendererFlags |= SDL_RENDERER_ACCELERATED;
+    }
+    else
+    {
+        SDL_SetHint(SDL_HINT_RENDER_DRIVER, "software");
+    }
 
-        renderer = SDL_CreateRenderer(window, -1, flags);
-        if(renderer)
-        {
-            SDL_RendererInfo rendererInfo;
-            if(SDL_GetRendererInfo(renderer, &rendererInfo) == 0)
-            {
-                LOG_INFO("Created SDL renderer: {}", rendererInfo.name);
-                LOG_INFO("Renderer hardware acceleration: {}",
-                    (rendererInfo.flags & SDL_RENDERER_ACCELERATED) != 0);
-                LOG_INFO("Renderer present vsync: {}",
-                    (rendererInfo.flags & SDL_RENDERER_PRESENTVSYNC) != 0);
-                LOG_INFO("Renderer available texture formats:");
-                for(uint32_t i = 0; i < rendererInfo.num_texture_formats; ++i)
-                {
-                    LOG_INFO("  {}", SDL_GetPixelFormatName(
-                        rendererInfo.texture_formats[i]));
-                }
-            }
-        }
-        else
-        {
-            LOG_WARNING("Failed to create SDL renderer");
-            LOG_WARNING("Falling back to software present");
-            enableHardwarePresent = false;
-        }
+    if(requestPresentVsync)
+    {
+        rendererFlags |= SDL_RENDERER_PRESENTVSYNC;
+    }
+
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, rendererFlags);
+    if(!renderer)
+    {
+        LOG_CRITICAL("Failed to create SDL renderer");
+        return 1;
     }
 
     SCOPE_GUARD([&renderer]()
@@ -92,7 +78,23 @@ int main(int argc, char* args[])
         renderer = nullptr;
     });
 
-    // Create application instance
+    SDL_RendererInfo rendererInfo;
+    if(SDL_GetRendererInfo(renderer, &rendererInfo) == 0)
+    {
+        LOG_INFO("Created SDL renderer: {}", rendererInfo.name);
+        LOG_INFO("Renderer hardware acceleration: {}",
+            (rendererInfo.flags & SDL_RENDERER_ACCELERATED) != 0);
+        LOG_INFO("Renderer present vsync: {}",
+            (rendererInfo.flags & SDL_RENDERER_PRESENTVSYNC) != 0);
+        LOG_INFO("Renderer available texture formats:");
+        for(uint32_t i = 0; i < rendererInfo.num_texture_formats; ++i)
+        {
+            LOG_INFO("  {}", SDL_GetPixelFormatName(
+                rendererInfo.texture_formats[i]));
+        }
+    }
+
+    // Create application
     Application::SetupInfo applicationSetup{};
     applicationSetup.windowWidth = windowWidth;
     applicationSetup.windowHeight = windowHeight;
@@ -100,85 +102,46 @@ int main(int argc, char* args[])
     Application application;
     if(!application.Setup(applicationSetup))
     {
-        LOG_CRITICAL("Failed to setup application instance");
+        LOG_CRITICAL("Failed to setup application");
         return 1;
     }
 
     const Graphics::Texture& frame = application.GetRenderer().GetFrame();
 
-    // Create frame texture
-    SDL_Texture* frameTexture = nullptr;
-    auto createFrameTexture = [&]()
+    // Create texture
+    SDL_Texture* texture = nullptr;
+    auto createTexture = [&]()
     {
-        if(frameTexture)
+        if(texture)
         {
-            SDL_DestroyTexture(frameTexture);
-            frameTexture = nullptr;
+            SDL_DestroyTexture(texture);
+            texture = nullptr;
         }
 
-        if(enableHardwarePresent)
+        texture = SDL_CreateTexture(renderer,
+            SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING,
+            frame.GetWidth(), frame.GetHeight());
+
+        if(!texture)
         {
-            frameTexture = SDL_CreateTexture(renderer,
-                SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING,
-                frame.GetWidth(), frame.GetHeight());
-
-            if(!frameTexture)
-            {
-                LOG_WARNING("Failed to create SDL texture");
-                LOG_WARNING("Falling back to software present");
-                enableHardwarePresent = false;
-            }
-
-            SDL_SetTextureScaleMode(frameTexture, SDL_ScaleModeNearest);
+            LOG_CRITICAL("Failed to create SDL texture");
+            return false;
         }
+
+        SDL_SetTextureScaleMode(texture, SDL_ScaleModeNearest);
 
         return true;
     };
 
-    if(!createFrameTexture())
+    if(!createTexture())
+    {
         return 1;
+    }
 
-    SCOPE_GUARD([&frameTexture]()
+    SCOPE_GUARD([&texture]()
     {
-        SDL_DestroyTexture(frameTexture);
-        frameTexture = nullptr;
-    });
-
-    // Create frame surface
-    // It will be used to blit into window surface. We could avoid allocating
-    // this, but then we would lose scaling functionality provided by SDL.
-    SDL_Surface* frameSurface = nullptr;
-    auto createFrameSurface = [&]()
-    {
-        if(frameSurface)
-        {
-            SDL_FreeSurface(frameSurface);
-            frameSurface = nullptr;
-        }
-
-        if(!enableHardwarePresent)
-        {
-            frameSurface = SDL_CreateRGBSurfaceWithFormat(
-                0, frame.GetWidth(), frame.GetHeight(), 32,
-                SDL_PIXELFORMAT_ARGB8888);
-
-            if(!frameSurface)
-            {
-                LOG_CRITICAL("Failed to create SDL surface");
-                return false;
-            }
-        }
-
-        return true;
-    };
-
-    if(!createFrameSurface())
-        return 1;
-
-    SCOPE_GUARD([&frameSurface]()
-    {
-        SDL_FreeSurface(frameSurface);
-        frameSurface = nullptr;
+        SDL_DestroyTexture(texture);
+        texture = nullptr;
     });
 
     // Start main loop
@@ -195,7 +158,7 @@ int main(int argc, char* args[])
         float deltaTime = (float)((double)(timeCurrent - timePrevious)
             / (double)SDL_GetPerformanceFrequency());
 
-        // Display framerate
+        // Display frame rate
         frameRateUpdateDelay -= deltaTime;
         if(frameRateUpdateDelay < 0.0f)
         {
@@ -226,7 +189,7 @@ int main(int argc, char* args[])
                     LOG_INFO("Window size changed to {}x{}", windowWidth, windowHeight);
 
                     if(!application.OnResize(windowWidth, windowHeight) ||
-                        !createFrameTexture() || !createFrameSurface())
+                        !createTexture())
                     {
                         LOG_CRITICAL("Failed to resize window");
                         quit = true;
@@ -243,25 +206,13 @@ int main(int argc, char* args[])
         // Frame processing
         application.OnFrame(deltaTime);
 
-        // Present frame
-        if(enableHardwarePresent)
-        {
-            // Update and render texture to screen 
-            SDL_UpdateTexture(frameTexture, nullptr, frame.GetData(), frame.GetPitch());
-            SDL_RenderCopy(renderer, frameTexture, nullptr, nullptr);
-            SDL_RenderPresent(renderer);
-        }
-        else
-        {
-            // Copy frame to surface
-            auto frameSurfacePixels = (uint32_t*)frameSurface->pixels;
-            memcpy(frameSurfacePixels, frame.GetData(), frame.GetDataSize());
+        // Upload texture data
+        SDL_UpdateTexture(texture, nullptr, frame.GetData(), frame.GetPitch());
+        SDL_RenderCopy(renderer, texture, nullptr, nullptr);
 
-            // Copy surface to window and present
-            SDL_Surface* windowSurface = SDL_GetWindowSurface(window);
-            SDL_BlitScaled(frameSurface, nullptr, windowSurface, nullptr);
-            SDL_UpdateWindowSurface(window);
-        }
+        // Present frame
+        SDL_RenderSetVSync(renderer, requestPresentVsync ? SDL_TRUE : SDL_FALSE);
+        SDL_RenderPresent(renderer);
     }
 
     LOG_INFO("Exiting application...");
