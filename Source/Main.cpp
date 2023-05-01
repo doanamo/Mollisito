@@ -5,9 +5,10 @@ int main(int argc, char* args[])
 {
     Common::SetupLogger();
 
-    // Global flags
+    // Global settings
     bool requestHardwarePresent = true;
     bool requestPresentVsync = false;
+    float resolutionScale = 1.0f;
 
     // Initialize SDL
     if(SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -111,8 +112,9 @@ int main(int argc, char* args[])
             texture = nullptr;
         }
 
-        texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32,
-            SDL_TEXTUREACCESS_STREAMING, windowWidth, windowHeight);
+        texture = SDL_CreateTexture(renderer,
+            SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING,
+            windowWidth * resolutionScale, windowHeight * resolutionScale);
 
         if(!texture)
         {
