@@ -6,7 +6,7 @@ int main(int argc, char* args[])
     Common::SetupLogger();
 
     // Global flags
-    bool requestHardwarePresent = false;
+    bool requestHardwarePresent = true;
     bool requestPresentVsync = false;
 
     // Initialize SDL
@@ -233,7 +233,7 @@ int main(int argc, char* args[])
         // Upload texture data
         if(rendererInfo.flags & SDL_RENDERER_ACCELERATED)
         {
-            const Graphics::Image& frame = application.GetRenderer().GetFrame().GetImage();
+            const Graphics::Image& frame = application.GetRenderer().GetFrameColor().GetImage();
             SDL_UpdateTexture(texture, nullptr, frame.GetPixels(), frame.GetPitch());
         }
 

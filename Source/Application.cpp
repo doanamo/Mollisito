@@ -14,7 +14,7 @@ bool Application::Setup(const SetupInfo& info)
 
 void Application::OnFrame(float deltaTime)
 {
-    m_renderer.ClearFrame(Math::Vec4f(0.0f, 0.0f, 0.0f, 0.0f));
+    m_renderer.ClearFrame(Math::Vec4f(0.0f, 0.0f, 0.0f, 0.0f), 0.0f);
 }
 
 bool Application::OnResize(const ResizeInfo& info)

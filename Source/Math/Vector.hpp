@@ -46,7 +46,7 @@ namespace Math
     struct Vec3
     {
         Vec3() = default;
-        constexpr Vec3(Type x, Type y, Type z)
+        constexpr Vec3(Type x, Type y = {}, Type z = {})
             : x(x), y(y), z(z)
         {
         }
@@ -99,7 +99,7 @@ namespace Math
     struct Vec4
     {
         Vec4() = default;
-        constexpr Vec4(Type x, Type y, Type z, Type w)
+        constexpr Vec4(Type x, Type y = {}, Type z = {}, Type w = {})
             : x(x), y(y), z(z), w(w)
         {
         }

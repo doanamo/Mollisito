@@ -19,11 +19,16 @@ namespace Graphics
 
         bool Setup(const SetupInfo& info);
         bool Resize(const Image::BufferInfo& info);
-        void ClearFrame(const Math::Vec4f& color);
+        void ClearFrame(const Math::Vec4f& color, float depth);
 
-        Texture& GetFrame()
+        Texture& GetFrameColor()
         {
-            return m_frame;
+            return m_frameColor;
+        }
+
+        Texture& GetFrameDepth()
+        {
+            return m_frameDepth;
         }
 
         Clipper& GetClipper()
@@ -37,7 +42,9 @@ namespace Graphics
         }
 
     private:
-        Texture m_frame;
+        Texture m_frameColor;
+        Texture m_frameDepth;
+
         Clipper m_clipper;
         Rasterizer m_rasterizer;
     };
