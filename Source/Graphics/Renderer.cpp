@@ -5,9 +5,8 @@ bool Graphics::Renderer::Setup(const SetupInfo& info)
 {
     // Create frame texture
     Texture::SetupInfo frameInfo;
-    frameInfo.buffer = info.frameBuffer;
-    frameInfo.channelType = Graphics::Texture::ChannelType::Uint8;
-    frameInfo.channelCount = 4;
+    frameInfo.format = Format::R8G8B8A8_UINT;
+    frameInfo.imageBuffers = { info.frameBuffer };
 
     if(!m_frame.Setup(frameInfo))
     {
@@ -18,9 +17,10 @@ bool Graphics::Renderer::Setup(const SetupInfo& info)
     return true;
 }
 
-bool Graphics::Renderer::Resize(const Texture::BufferInfo& info)
+bool Graphics::Renderer::Resize(const Image::BufferInfo& info)
 {
-    if(!m_frame.Resize(info))
+    Texture::ImageBufferInfos infos = { info };
+    if(!m_frame.Resize(infos))
     {
         LOG_ERROR("Failed to resize frame texture");
         return false;

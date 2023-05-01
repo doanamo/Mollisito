@@ -19,10 +19,7 @@ void Application::OnFrame(float deltaTime)
 
 bool Application::OnResize(const ResizeInfo& info)
 {
-    Graphics::Texture::BufferInfo frameBufferInfo;
-    frameBufferInfo = info.frameBuffer;
-
-    if(!m_renderer.Resize(frameBufferInfo))
+    if(!m_renderer.Resize(info.frameBuffer))
         return false;
 
     return true;

@@ -10,7 +10,7 @@ namespace Graphics
     public:
         struct SetupInfo
         {
-            Texture::BufferInfo frameBuffer;
+            Image::BufferInfo frameBuffer;
         };
 
     public:
@@ -18,7 +18,7 @@ namespace Graphics
         ~Renderer() = default;
 
         bool Setup(const SetupInfo& info);
-        bool Resize(const Texture::BufferInfo& info);
+        bool Resize(const Image::BufferInfo& info);
         void ClearFrame(const Math::Vec4f& color);
 
         Texture& GetFrame()

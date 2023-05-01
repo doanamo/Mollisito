@@ -12,7 +12,7 @@ public:
 
     struct ResizeInfo
     {
-        Graphics::Texture::BufferInfo frameBuffer;
+        Graphics::Image::BufferInfo frameBuffer;
     };
 
 public:

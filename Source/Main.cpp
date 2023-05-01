@@ -6,7 +6,7 @@ int main(int argc, char* args[])
     Common::SetupLogger();
 
     // Global flags
-    bool requestHardwarePresent = true;
+    bool requestHardwarePresent = false;
     bool requestPresentVsync = false;
 
     // Initialize SDL
@@ -102,7 +102,7 @@ int main(int argc, char* args[])
 
     // Create texture
     SDL_Texture* texture = nullptr;
-    Graphics::Texture::BufferInfo textureBufferInfo;
+    Graphics::Image::BufferInfo imageBufferInfo;
     auto createTexture = [&]()
     {
         if(texture)
@@ -122,17 +122,17 @@ int main(int argc, char* args[])
 
         SDL_SetTextureScaleMode(texture, SDL_ScaleModeNearest);
 
-        textureBufferInfo = {};
+        imageBufferInfo = {};
         SDL_QueryTexture(texture, nullptr, nullptr,
-            &textureBufferInfo.width,
-            &textureBufferInfo.height);
+            &imageBufferInfo.width,
+            &imageBufferInfo.height);
 
         if(rendererInfo.flags & SDL_RENDERER_SOFTWARE)
         {
             // Use texture data directly if software renderer is used
             SDL_LockTexture(texture, nullptr,
-                &textureBufferInfo.pixels,
-                &textureBufferInfo.pitch);
+                &imageBufferInfo.pixels,
+                &imageBufferInfo.pitch);
         }
 
         return true;
@@ -151,7 +151,7 @@ int main(int argc, char* args[])
 
     // Create application
     Application::SetupInfo applicationSetup{};
-    applicationSetup.renderer.frameBuffer = textureBufferInfo;
+    applicationSetup.renderer.frameBuffer = imageBufferInfo;
 
     Application application;
     if(!application.Setup(applicationSetup))
@@ -211,7 +211,7 @@ int main(int argc, char* args[])
                     }
 
                     Application::ResizeInfo resizeInfo;
-                    resizeInfo.frameBuffer = textureBufferInfo;
+                    resizeInfo.frameBuffer = imageBufferInfo;
 
                     if(!application.OnResize(resizeInfo))
                     {
@@ -233,7 +233,7 @@ int main(int argc, char* args[])
         // Upload texture data
         if(rendererInfo.flags & SDL_RENDERER_ACCELERATED)
         {
-            const Graphics::Texture& frame = application.GetRenderer().GetFrame();
+            const Graphics::Image& frame = application.GetRenderer().GetFrame().GetImage();
             SDL_UpdateTexture(texture, nullptr, frame.GetPixels(), frame.GetPitch());
         }
 

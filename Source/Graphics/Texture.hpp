@@ -1,30 +1,19 @@
 #pragma once
 
+#include "Graphics/Formats.hpp"
+#include "Graphics/Image.hpp"
+
 namespace Graphics
 {
     class Texture : private Common::NonCopyable
     {
     public:
-        enum class ChannelType
-        {
-            Invalid,
-            Uint8,
-            Float,
-        };
-
-        struct BufferInfo
-        {
-            int width = 0;
-            int height = 0;
-            int pitch = 0;
-            void* pixels = nullptr;
-        };
+        using ImageBufferInfos = std::vector<Image::BufferInfo>;
 
         struct SetupInfo
         {
-            ChannelType channelType = ChannelType::Invalid;
-            int channelCount = 0;
-            BufferInfo buffer;
+            Format format = Format::Invalid;
+            ImageBufferInfos imageBuffers;
         };
 
     public:
@@ -32,102 +21,41 @@ namespace Graphics
         ~Texture() = default;
 
         bool Setup(const SetupInfo& info);
-        bool Resize(const BufferInfo& info);
-
+        bool Resize(const ImageBufferInfos& imageBuffers);
         void Clear(const Math::Vec4f& color);
-        void SetPixel(int x, int y, const Math::Vec4f& color);
-        Math::Vec4f GetPixel(int x, int y) const;
 
-        ChannelType GetChannelType() const
+        Image& GetImage(int index = 0)
         {
-            ASSERT(m_channelType != ChannelType::Invalid);
-            return m_channelType;
+            return const_cast<Image&>(
+                std::as_const(*this).GetImage(index));
         }
 
-        int GetChannelCount() const
+        const Image& GetImage(int index = 0) const
         {
-            ASSERT(m_channelCount > 0);
-            return m_channelCount;
+            ASSERT(index >= 0 && index < m_images.size());
+            return *m_images[index];
         }
 
-        int GetChannelSize() const
+        Format GetFormat() const
         {
-            ASSERT(m_channelSize > 0);
-            return m_channelSize;
+            ASSERT(m_format != Format::Invalid);
+            return m_format;
         }
 
         int GetWidth() const
         {
-            ASSERT(m_width > 0);
-            return m_width;
+            ASSERT(!m_images.empty());
+            return m_images[0]->GetWidth();
         }
 
         int GetHeight() const
         {
-            ASSERT(m_height > 0);
-            return m_height;
-        }
-
-        int GetPitch() const
-        {
-            ASSERT(m_pitch > 0);
-            return m_pitch;
-        }
-
-        uint8_t* GetPixelAddress(int x, int y)
-        {
-            return const_cast<uint8_t*>(
-                std::as_const(*this).GetPixelAddress(x, y));
-        }
-
-        const uint8_t* GetPixelAddress(int x, int y) const
-        {
-            ASSERT(x >= 0 && x < GetWidth());
-            ASSERT(y >= 0 && y < GetHeight());
-            return GetPixelAddress(y * GetWidth() + x);
-        }
-
-        uint8_t* GetPixelAddress(int index)
-        {
-            return const_cast<uint8_t*>(
-                std::as_const(*this).GetPixelAddress(index));
-        }
-
-        const uint8_t* GetPixelAddress(int index) const
-        {
-            int pixelIndex = GetPixelSize() * index;
-            ASSERT(pixelIndex >= 0 && pixelIndex < GetSize());
-            return &GetPixels()[pixelIndex];
-        }
-
-        const uint8_t* GetPixels() const
-        {
-            ASSERT(m_pixelsPtr);
-            return m_pixelsPtr;
-        }
-
-        int GetPixelSize() const
-        {
-            ASSERT(m_pixelSize > 0);
-            return m_pixelSize;
-        }
-
-        int GetSize() const
-        {
-            return GetHeight() * GetPitch();
+            ASSERT(!m_images.empty());
+            return m_images[0]->GetHeight();
         }
 
     private:
-        ChannelType m_channelType = ChannelType::Invalid;
-        int m_channelCount = 0;
-        int m_channelSize = 0;
-
-        int m_width = 0;
-        int m_height = 0;
-        int m_pitch = 0;
-
-        std::vector<uint8_t> m_pixels;
-        uint8_t* m_pixelsPtr = nullptr;
-        int m_pixelSize = 0;
+        Format m_format = Format::Invalid;
+        std::vector<std::unique_ptr<Image>> m_images;
     };
 }
