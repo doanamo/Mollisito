@@ -92,6 +92,20 @@ void Graphics::Image::Clear(const Math::Vec4f& color)
             }
         }
     }
+    else if(m_channelType == ChannelType::Float && m_channelCount == 1)
+    {
+        if(color.r == 0.0f)
+        {
+            memset(m_pixelsPtr, 0, m_height * m_pitch);
+        }
+        else
+        {
+            for(int i = 0; i < m_width * m_height; ++i)
+            {
+                (float&)m_pixelsPtr[i * m_pixelSize] = color.r;
+            }
+        }
+    }
     else
     {
         for(int y = 0; y < m_height; ++y)
