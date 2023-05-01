@@ -123,8 +123,10 @@ int main(int argc, char* args[])
         SDL_SetTextureScaleMode(texture, SDL_ScaleModeNearest);
 
         textureBufferInfo = {};
-        textureBufferInfo.width = windowWidth;
-        textureBufferInfo.height = windowHeight;
+        SDL_QueryTexture(texture, nullptr, nullptr,
+            &textureBufferInfo.width,
+            &textureBufferInfo.height);
+
         if(rendererInfo.flags & SDL_RENDERER_SOFTWARE)
         {
             // Use texture data directly if software renderer is used
